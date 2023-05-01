@@ -1,0 +1,163 @@
+# Multicritera Evaluation #1
+
+## Data Clean-Up
+
+### Methodology
+
+-   Turn cultural resources, natural resource, infrastructure/facilities into a mosaic raster.
+-   Re-scale the elevation measurements so the lowest elevation is 1 and the highest elevation is 0.
+-   Code the land cover using reclassify (Dense vegetation = 0, Shrubs/mixed vegetation = 0.5, No vegetation = 1).
+-   Re-scale the distance from the sandy shorelines so the cells closest to sandy shorelines are 1 and the cells furthest from the sandy shorelines are 0.
+-   Re-scale the distance from retreating bluffs so the cells closest to bluff are 1 and the cells furthest from the bluff are 0.
+-   Flood destruction rasters of all the CFEP zones needs to be split up by 10% and 1% raster grids per Sea Level Rise Scneario (2030, 2050, and 2070).
+
+### Workspace set-up
+
+``` {#workspace .python .Python style="color: grey"}
+#Import system modules
+import arcpy
+from arcpy import env  
+from arcpy.sa import *
+arcpy.env.workspace = "C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_Project/BOHA_SpatialDecisionSupportSystem/Data"
+env.scratchWorkspace ="C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_Project/BOHA_SpatialDecisionSupportSystem/Data/Raster_Scratch.gdb"
+```
+
+### Data processing and clean-up for MCE #1 raster grid inputs
+
+-   **R1. Focal Resources Raster Mosaic.**
+
+    -   Input 1: Natural Resources (salt marshes, coastal bird habitats, coastal dunes, rare plant species,
+
+    -   Input 2: Cultural Resources (National Historic Landmarks, Native American burial sites, etc.)
+
+    -   Input 3: Infrastructure/Facilties (piers, park facilities, cottages, shops, etc.)
+
+        ``` python
+        # Turn all feature classes in focalresources_vectorinputs.gdb into raster datasets.
+
+        # Compile all focal resources datasets into a mosaic raster that can be used in the MCE #1 BOHA Raster Calculater ArcGIS Geoprocessing tool
+        ```
+
+-   **R2. Raster of localized Boston Harbor Islands conditions that contributes to coastal exposure risk**
+
+    -   [Erosion Risk]{.smallcaps}
+
+        *Input 1: Retreating Bluff Zones (0-1)*
+
+        ``` python
+        # Local variables
+        inSourceData_BR = "Vector_Data.gdb/Bluffs_Retreating"
+        cellSize = 1
+        mask_features = "Vector_Data.gdb/Amy_BOHA9_POLYS"
+        # Local output locations
+        in_raster_BR = "C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_Project/BOHA_SpatialDecisionSupportSystem/Data/Raster_Scratch.gdb/BR_EucDistOut"
+        BluffRetreat_Grid = "C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_Project/BOHA_SpatialDecisionSupportSystem/Data/Raster_Outputs.gdb/BluffRetreat_Grid"
+
+        #Step 1: Euclidean distance tool
+        with arcpy.EnvManager(mask = mask_features):
+            BOHA_BluffsRetreating_EucDistance = arcpy.sa.EucDistance(in_source_data = inSourceData_BR, cell_size = cellSize)
+            BOHA_BluffsRetreating_EucDistance.save(in_raster_BR)
+        in_raster_BR = arcpy.Raster(in_raster_BR)
+
+        #Step 2: Re-scale the distance from the sandy shorelines so the cells closest to sandy shorelines are 1 and the cells furthest from the sandy shorelines are 0.
+        BluffRetreat_Grid = (1-(in_raster_BR - in_raster_BR.minimum)/(in_raster_BR.maximum-in_raster_BR.minimum))
+        BluffRetreat_Grid.save(BluffRetreat_Grid)
+        ```
+
+        *Input 2: Distance from sandy shorelines (0-1)*
+
+        ``` python
+        #Local variables
+        inSourceData_SS = "Vector_Data.gdb/Sandy_Shoreline"
+        mask_features = "Vector_Data.gdb/Amy_BOHA9_POLYS"
+        cellSize = 1
+        # Local output locations
+        in_raster_SS = "C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_Project/BOHA_SpatialDecisionSupportSystem/Data/Raster_Scratch.gdb/SS_EucDistOut"
+        SandyShoreline_Grid = "C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_Project/BOHA_SpatialDecisionSupportSystem/Data/Raster_Outputs.gdb/SandyShoreline_Grid"
+
+        #Step 1: Euclidean distance tool
+        with arcpy.EnvManager(mask = mask_features):
+            SS_EucDistance = arcpy.sa.EucDistance(in_source_data = inSourceData_SS, cell_size = cellSize)
+            SS_EucDistance.save(in_raster_SS)
+        in_raster_SS = arcpy.Raster(in_raster_SS)
+
+        #Step 2: Re-scale the distance from the sandy shorelines so the cells closest to sandy shorelines are 1 and the cells furthest from the sandy shorelines are 0.
+        SS_Grid = (1-(in_raster_SS - in_raster_SS.minimum)/(in_raster_SS.maximum-in_raster_SS.minimum))
+        SS_Grid.save(SandyShoreline_Grid)
+        ```
+
+        *Input 3: Unvegetated land cover (0 = dense vegetation, 0.5 = partial vegetation, 1 = no vegetation)*
+
+        ``` python
+        # Local variables
+        insourceData_LC = "Vector_Data.gdb/Landcover_polys"
+        cellSize = 1
+        mask_features = "Vector_Data.gdb/Amy_BOHA9_POLYS"
+        # Local output locations
+        Landcover_raster = "C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_Project/BOHA_SpatialDecisionSupportSystem/Data/Raster_Scratch.gdb/Landcover_Raster"
+        Landcover_Grid = "C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_Project/BOHA_SpatialDecisionSupportSystem/Data/Raster_Outputs.gdb/Landcover_Grid"
+
+        # Step 1: Turn vector data into raster data
+        with arcpy.EnvManager(mask = mask_features):
+            arcpy.conversion.PolygonToRaster(in_features = insourceData_LC, value_field = "COVERCODE", out_rasterdataset = Landcover_raster, cellsize = cellSize)
+
+        # Step 2: Code the land cover using reclassify (0 = dense vegetatation, 0.5 = partially vegetated, 1 = no vegetation)
+        LC_ReclassifyGrid = arcpy.sa.Reclassify(in_raster = Landcover_raster, reclass_field = "Value", remap = RemapValue([[2,10],[5,10],[6,5],[7,5],[8,5],[9,0],[10,0],[12,0],[13,0], [14,0],[15,5],[18,5],[19,10],[20,10],[23,10]]))
+
+        # Step 3: Raster calculator so that vegetation is valued at 0 to 1
+        LC_Grid = LC_ReclassifyGrid/10
+        LC_Grid.save(Landcover_Grid)
+        ```
+
+    -   [Food Risk]{.smallcaps}
+
+        *Input 4: Elevation*
+
+        ``` python
+        # Local variables
+        inRaster_Elev = arcpy.Raster("Raster_Data.gdb/MA_GCS_3m_NAVDm")
+        mask_features = "Vector_Data.gdb/Amy_BOHA9_POLYS.shp"
+        # Local output locations
+        Elevation_Grid = "C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_Project/BOHA_SpatialDecisionSupportSystem/Data/Raster_Outputs.gdb/Elevation_Grid"
+
+        #Step 1: INVERSE: Re-scale the elevation measurements so the lowest elevation is 1 and the highest elevation is 0.
+        with arcpy.EnvManager(mask = mask_features):
+            Elev_Grid = (1-(inRaster_Elev - inRaster_Elev.minimum)/(inRaster_Elev.maximum - inRaster_Elev.minimum))
+            Elev_Grid.save(Elevation_Grid)
+        ```
+
+    -   [Storm risk]{.smallcaps}
+
+        *Input 5: Sea Level Rise 10% AEP*
+
+        ``` python
+        # Sea Level Rise Scenario 2030
+
+
+        # Sea Level Rise Scenario 2050
+
+
+        # Sea Level Rise Scenario 2070
+        ```
+
+-   **R3. Sea Level Rise 1% AEP**
+
+    ``` python
+    # Sea Level Rise Scenario 2030
+
+
+    # Sea Level Rise Scenario 2050
+
+
+    # Sea Level Rise Scenario 2070
+    ```
+
+## ArcGIS Geoprocessing Tool
+
+\[Description of why I created the tool\]
+
+``` python
+# Script for the tool
+```
+
+Click [here]{.smallcaps} to Download the ArcGIS Geoprocessing Tool: "Boston Harbor Coastal Exposure Risk Tool."
