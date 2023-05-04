@@ -162,8 +162,25 @@ var overlayMaps = {
 };
 
 //Layer box for all layer groups
-var layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+var layerControl = L.control
+  .layers(baseMaps, overlayMaps, {
+    collapsed: false,
+    hideSingleBase: true,
+  })
+  .addTo(map)
+  .expand();
 
+ // Adjusts layer visuals 
+var lcDIVElem = layerControl.getContainer();
+      document.addEventListener("keydown", (e) => {
+        if ((e.key === "l") | (e.key === "L")) {
+          if (lcDIVElem.style.display == "") {
+            lcDIVElem.style.display = "none";
+          } else {
+            lcDIVElem.style.display = "";
+          }
+        }
+      });
 
 // FETCHING DATA
 
@@ -198,70 +215,93 @@ fetch("./geojson_files/BOHA_Boundary.geojson")
   });
 
 
+// NEED TO WORK ON
+    // Search bar
+var searchControl = new L.Control.Search({
+  layer: Boundary,
+  propertyName: 'Island',
+  position: 'topright',
+  marker: false,
+  moveToLocation: function (latlng, map) {
+      map.fitBounds( latlng.layer.getBounds() );
+      let zoom = map.getBoundsZoom(latlng.layer.getBounds());
+      map.setView(latlng, zoom); // access the zoom
+  }
+});
 
-// // NEED TO WORK ON
-//     // Search bar
-// var searchControl = new L.Control.Search({
-//   layer: Boundary,
-//   propertyName: 'Island',
-//   //position: 'topright',
-//   marker: false,
-//   moveToLocation: function (latlng, title, map) {
-//       map.fitBounds( latlng.layer.getBounds() );
-//       let zoom = map.getBoundsZoom(latlng.layer.getBounds());
-//       map.setView(latlng, zoom); // access the zoom
-//   }
-// });
+searchControl.on('search:locationfound', function (e) {
 
-// searchControl.on('search:locationfound', function (e) {
+  //console.log('search:locationfound', );
 
-//   //console.log('search:locationfound', );
+  //map.removeLayer(this._markerSearch)
+  e.layer.setStyle({ fillColor: '#3f0', color: '#0f0' });
+  if (e.layer._popup)
+      e.layer.openPopup();
 
-//   //map.removeLayer(this._markerSearch)
-//   e.layer.setStyle({ fillColor: '#3f0', color: '#0f0' });
-//   if (e.layer._popup)
-//       e.layer.openPopup();
+}).on('search:collapsed', function (e) {
 
-// }).on('search:collapsed', function (e) {
+  featuresLayer.eachLayer(function (layer) {	//restore feature color
+      featuresLayer.resetStyle(layer);
+  });
+});
 
-//   featuresLayer.eachLayer(function (layer) {	//restore feature color
-//       featuresLayer.resetStyle(layer);
+map.addControl(searchControl);  //inizialize search control
+
+map.addControl(new L.Control.Search({
+  url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}&countrycodes=us',
+  position: 'topleft',
+  jsonpParam: 'json_callback',
+  propertyName: 'display_name',
+  propertyLoc: ['lat', 'lon'],
+  marker: L.circleMarker([0, 0], { radius: 30 }),
+  autoCollapse: true,
+  autoType: false,
+  minLength: 2,
+  container: '',
+  moveToLocation: function (latlng, title, map) {
+      //map.fitBounds( latlng.layer.getBounds() );
+      let zoom = 12; //map.getBoundsZoom(latlng.layer.getBounds());
+      map.setView(latlng, zoom); // access the zoom
+  }
+}));
+
+const geosearchCtrl = new GeoSearch.GeoSearchControl({
+  provider: new GeoSearch.OpenStreetMapProvider({
+      params: {
+          'accept-language': 'en', // render results in Dutch
+          countrycodes: 'us', // limit search results to the Netherlands
+          addressdetails: 0, // include additional address detail parts
+      },
+  }),
+  position: "topright",
+  style: 'bar',
+  marker: {
+      // optional: L.Marker    - default L.Icon.Default
+      icon: new L.Icon.Default(),
+      draggable: false,
+  },
+});
+
+map.addControl(geosearchCtrl);
+
+map.on('geosearch/showlocation', (rslt) => {
+  let latlng = [rslt.location.y, rslt.location.x];
+  Boundary.eachLayer((l) => {
+      let pt = turf.point([rslt.location.x, rslt.location.y]);
+
+      if (turf.booleanPointInPolygon(pt, l.feature)) {
+          map.fitBounds(l.getBounds());
+          l.setStyle({ color: '#F00' })
+      }
+  });
+});
+
+// // Fetch BOHA Boundary
+// fetch("./geojson_files/BOHA_Boundary.geojson")
+// .then((response) => {
+//   return response.json();
+// })
+// .then((data) => {
+//   console.log(data);
+//   Boundary.addData(data);
 //   });
-// });
-
-// map.addControl(searchControl);  //inizialize search control
-
-// map.addControl(new L.Control.Search({
-//   url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}&countrycodes=us',
-//   position: 'topleft',
-//   jsonpParam: 'json_callback',
-//   propertyName: 'display_name',
-//   propertyLoc: ['lat', 'lon'],
-//   marker: L.circleMarker([0, 0], { radius: 30 }),
-//   autoCollapse: true,
-//   autoType: false,
-//   minLength: 2,
-//   container: '',
-//   moveToLocation: function (latlng, title, map) {
-//       //map.fitBounds( latlng.layer.getBounds() );
-//       let zoom = 12; //map.getBoundsZoom(latlng.layer.getBounds());
-//       map.setView(latlng, zoom); // access the zoom
-//   }
-// }));
-
-// //search again...
-// var searchLayer = L.layerGroup(Boundary).addTo(map);
-// //... adding data in searchLayer ...
-// map.addControl( new L.Control.Search({layer: Boundary}) );
-// //searchLayer is a L.LayerGroup contains searched markers
-
-// var searchControl = new L.Control.Search({
-//   layer: featuresLayer,
-//   propertyName: 'name',
-//   marker: false,
-//   moveToLocation: function(latlng, title, map) {
-//     //map.fitBounds( latlng.layer.getBounds() );
-//     var zoom = map.getBoundsZoom(latlng.layer.getBounds());
-//       map.setView(latlng, zoom); // access the zoom
-//   }
-// });
