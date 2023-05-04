@@ -38,11 +38,12 @@ var baseMaps = {
 
 function onEachFeatureFn(feature, layer) {
   var popupContent =
-    "<p>Feature Type: " +
-    feature.geometry.type;
+    //"<p> Island: " +
+    feature.properties.Island;
+    //feature.geometry.type;
     //  +
-    // "</br> ID: " +
-    // feature.properties.GEO_ID +
+    // "</br> Island: " +
+    // feature.properties.Island;
     // "</br> Name: " +
     // feature.properties.NAME +
     // "</p>";
@@ -53,62 +54,65 @@ function onEachFeatureFn(feature, layer) {
 
   layer.bindPopup(popupContent);
 
+  //layer.on()
+
   layer.on({
     mouseover: function (e) {
       e.target.setStyle({ 
-        fillColor: "#295982",
-        opacity: .8, });
+        Color: "#ffffff",
+        opacity: 0.9, 
+        weight: 3,
+      });
       e.target.openPopup();
     },
     mouseout: (e) => {
-      SLR2030_1.resetStyle(e.target);
+      //SLR2030_1.resetStyle(e.target);
+      //SLR2030_10.resetStyle(e.target);
+      Boundary.resetStyle(e.target);
       e.target.closePopup();
     },
   });
 }
 
-
 //POINTS (CVS)
-
 // Read markers data from data.csv
 $.get('geojson_files/cultural_points.csv', function(csvString) {
-// Use PapaParse to convert string to array of objects
-var data = Papa.parse(csvString, {header: true, dynamicTyping: true}).data;
-// For each row in data, create a marker and add it to the map
-// For each row, columns `Latitude`, `Longitude`, and `Title` are required
-for (var i in data) {
-  var row = data[i];
-  var marker = L.circleMarker([row.Latitude, row.Longitude], {
-    radius: 3,
-    fillColor: 'purple',
-    color: 'purple',
-    weight: 0.1,
-    opacity: 1,
-    fillOpacity: 0.5,
-    pane: 'markerPane',
-    // }).bindTooltip(feature.properties.NAME)
-
-  //customize your icon
-  // icon: L.icon({
-  //   iconUrl: "https://img.icons8.com/plasticine/100/null/map-pin.png",
-  //   iconSize: [12, 10]
-  // })
-  }).bindPopup(row.Island);    
-  marker.addTo(map);
-  }
-});
-
+  // Use PapaParse to convert string to array of objects
+  var data = Papa.parse(csvString, {header: true, dynamicTyping: true}).data;
+  // For each row in data, create a marker and add it to the map
+  // For each row, columns `Latitude`, `Longitude`, and `Title` are required
+  for (var i in data) {
+    var row = data[i];
+    var marker = L.circleMarker([row.Latitude, row.Longitude], {
+      radius: 3,
+      fillColor: 'purple',
+      color: 'purple',
+      weight: 0.1,
+      opacity: 1,
+      fillOpacity: 0.5,
+      pane: 'markerPane',
+      // }).bindTooltip(feature.properties.NAME)
+  
+    //customize your icon
+    // icon: L.icon({
+    //   iconUrl: "https://img.icons8.com/plasticine/100/null/map-pin.png",
+    //   iconSize: [12, 10]
+    // })
+    }).bindPopup(row.Island);    
+    marker.addTo(map);
+    }
+  });
 
 // Style for SLR 2030 1% AEP
 var SLR2030_1 = L.geoJSON(null, {
   style: (feature) => {
     return { 
-      fillColor: '#6fabd0', //'#5fbaff' 
+      fillColor: '#003E78', //'#5fbaff' 
       weight: 2,
-      opacity: 0.5,
+      opacity: 1,
       //color: 'white',
       dashArray: '3',
-      fillOpacity: 0.7
+      fillOpacity: 1,
       //color: "#000", fill: "#ccc", fillOpacity: 0.2 
     };
   },
@@ -119,39 +123,42 @@ var SLR2030_1 = L.geoJSON(null, {
 var SLR2030_10 = L.geoJSON(null, {
   style: (feature) => {
     return { 
-      fillColor: "#295982",
+      fillColor: "#005EB8",
       weight: 2,
-      opacity: 0.8,
+      opacity: 0.9,
       //color: 'white',
-      dashArray: '3',
-      fillOpacity: 0.7
+      //dashArray: '3',
+      fillOpacity: 1,
     };
   },
-  onEachFeature: onEachFeatureFn,
+  //onEachFeature: onEachFeatureFn,
 }).addTo(map);
 
 // Style for boundary
 var Boundary = L.geoJSON(null, {
   style: (feature) => {
     return { 
-      color: "#ffffff",
+      color: "#fff",
       weight: 1,
     };
   },
+  onEachFeature: onEachFeatureFn,
 }).addTo(map);
 
 //Layers
 var SLR2030_10_CFEP = L.layerGroup([SLR2030_10]);
 var SLR2030_1_CFEP = L.layerGroup([SLR2030_1]);
-var Boundary_9Islands = L.layerGroup([Boundary])
-//var Culture_points = L.layerGroup([])
+var Boundary_9Islands = L.layerGroup([Boundary]);
+//var marker_points = L.layerGroup([marker])
+
 
 //Layer groups
 var overlayMaps = {
    //"cultural points" : data,
-    "SLR 9in + 10% AEP" : SLR2030_10_CFEP,
-    "SLR 9in + 1% AEP" : SLR2030_1_CFEP,
+    "SLR 2030 + 10% AEP" : SLR2030_10_CFEP,
+    "SLR 2030 + 1% AEP" : SLR2030_1_CFEP,
     "9 Islands Boundary" : Boundary_9Islands,
+    //"Cultural & Infrastructure/Facilities" : marker_points,
 };
 
 //Layer box for all layer groups
@@ -159,6 +166,7 @@ var layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
 
 
 // FETCHING DATA
+
 // Fetch geojson file for SLR 2030 1% AEP
 fetch("./geojson_files/c2030_1CFEPpoly.json")
 .then((response) => {
@@ -190,37 +198,38 @@ fetch("./geojson_files/BOHA_Boundary.geojson")
   });
 
 
-// NEED TO WORK ON
-    // Search bar
-var searchControl = new L.Control.Search({
-  layer: Boundary,
-  propertyName: 'Island',
-  //position: 'topright',
-  marker: false,
-  moveToLocation: function (latlng, title, map) {
-      //map.fitBounds( latlng.layer.getBounds() );
-      let zoom = map.getBoundsZoom(latlng.layer.getBounds());
-      map.setView(latlng, zoom); // access the zoom
-  }
-});
 
-searchControl.on('search:locationfound', function (e) {
+// // NEED TO WORK ON
+//     // Search bar
+// var searchControl = new L.Control.Search({
+//   layer: Boundary,
+//   propertyName: 'Island',
+//   //position: 'topright',
+//   marker: false,
+//   moveToLocation: function (latlng, title, map) {
+//       map.fitBounds( latlng.layer.getBounds() );
+//       let zoom = map.getBoundsZoom(latlng.layer.getBounds());
+//       map.setView(latlng, zoom); // access the zoom
+//   }
+// });
 
-  //console.log('search:locationfound', );
+// searchControl.on('search:locationfound', function (e) {
 
-  //map.removeLayer(this._markerSearch)
-  e.layer.setStyle({ fillColor: '#3f0', color: '#0f0' });
-  if (e.layer._popup)
-      e.layer.openPopup();
+//   //console.log('search:locationfound', );
 
-}).on('search:collapsed', function (e) {
+//   //map.removeLayer(this._markerSearch)
+//   e.layer.setStyle({ fillColor: '#3f0', color: '#0f0' });
+//   if (e.layer._popup)
+//       e.layer.openPopup();
 
-  featuresLayer.eachLayer(function (layer) {	//restore feature color
-      featuresLayer.resetStyle(layer);
-  });
-});
+// }).on('search:collapsed', function (e) {
 
-map.addControl(searchControl);  //inizialize search control
+//   featuresLayer.eachLayer(function (layer) {	//restore feature color
+//       featuresLayer.resetStyle(layer);
+//   });
+// });
+
+// map.addControl(searchControl);  //inizialize search control
 
 // map.addControl(new L.Control.Search({
 //   url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}&countrycodes=us',
