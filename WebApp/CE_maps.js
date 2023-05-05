@@ -1,41 +1,4 @@
-
-// Set up initial map
-var map = L.map('map', {
-    center: [42.3131628, -70.9297749], 
-    zoom: 13,
-    // maxZoom: 20,
-    // zoomDelta: 1,
-    // zoomControl: true,
-    // fullscreenControl: true,
-    // fullscreenControlOptions: {
-    // position: "topleft",
-    // },
-});
-
-
-// display Carto basemap tiles with light features and labels
-var light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>'
-}); // EDIT - insert or remove ".addTo(map)" before last semicolon to display by default
-
-
-/* Stamen colored terrain basemap tiles with labels */
-var terrain = L.tileLayer('https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png', {
-  attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.'
-}); // EDIT - insert or remove ".addTo(map)" before last semicolon to display by default
-
-var googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
-    subdomains:['mt0','mt1','mt2','mt3'],
-}).addTo(map); 
-
-//Layer group
-var baseMaps = {
-    "Google Earth Satellite": googleSat,
-    "Carto Light": light,
-    "Stamen Terrain": terrain, 
-
-};
-
+// Functions
 function onEachFeatureFn(feature, layer) {
   var popupContent =
     //"<p> Island: " +
@@ -66,15 +29,55 @@ function onEachFeatureFn(feature, layer) {
       e.target.openPopup();
     },
     mouseout: (e) => {
-      //SLR2030_1.resetStyle(e.target);
-      //SLR2030_10.resetStyle(e.target);
       Boundary.resetStyle(e.target);
       e.target.closePopup();
     },
   });
 }
 
-//POINTS (CVS)
+
+
+// Set up initial map
+var map = L.map('map', {
+    center: [42.3131628, -70.9297749], 
+    zoom: 13,
+    // maxZoom: 20,
+    // zoomDelta: 1,
+    // zoomControl: true,
+    // fullscreenControl: true,
+    // fullscreenControlOptions: {
+    // position: "topleft",
+    // },
+});
+
+// display Carto basemap tiles with light features and labels
+var light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>'
+}); // EDIT - insert or remove ".addTo(map)" before last semicolon to display by default
+
+
+/* Stamen colored terrain basemap tiles with labels */
+var terrain = L.tileLayer('https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png', {
+  attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.'
+}); // EDIT - insert or remove ".addTo(map)" before last semicolon to display by default
+
+var googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+    subdomains:['mt0','mt1','mt2','mt3'],
+}).addTo(map); 
+
+//Layer group
+var baseMaps = {
+    "Google Earth Satellite": googleSat,
+    "Carto Light": light,
+    "Stamen Terrain": terrain, 
+
+};
+
+
+
+// Adding Data...
+
+//Points (CVS)
 // Read markers data from data.csv
 $.get('geojson_files/cultural_points.csv', function(csvString) {
   // Use PapaParse to convert string to array of objects
@@ -103,62 +106,25 @@ $.get('geojson_files/cultural_points.csv', function(csvString) {
     }
   });
 
-// Style for Coastal Exposure MCE Analysis #1
+
+// Polygons (Geojson)
+// Creating variable & style for Coastal Exposure 2030
 var CE_2030 = L.geoJSON(null, {
-  // style: (feature) => {
-  //   return { 
-  //     fillColor: '#003E78', //'#5fbaff' 
-  //     weight: 2,
-  //     opacity: 1,
-  //     //color: 'white',
-  //     dashArray: '3',
-  //     fillOpacity: 1,
-  //     //color: "#000", fill: "#ccc", fillOpacity: 0.2 
-  //   };
-  // },
+  style: (feature) => {
+    return {
+      filter: (f) => f.properties.gridcode > 0,
+    };
+  },
   //onEachFeature: onEachFeatureFn,
 })
 .addTo(map);
 
-var CE_2030_B = L.geoJSON(null, {
-  style: (feature) => {
-    return {
-      fillColor: d3.interpolateOranges(
-      (f.properties.gridcode - minVal) / valRange
-      ),
-      //color: "#fff",
-      weight: 1,
-      fillOpacity: 0.8,
 
-  // onEachFeature: (f, l) => {
-  //     l.setStyle({ color: "#888" });
-
-  //     l.on({
-  //         mouseover: function (e) {
-  //             e.target.setStyle({ fillColor: "#111", weight: 2 });
-  //         },
-  //         mouseout: (e) => {
-  //             CE_2030_B.resetStyle(e.target);
-  //             e.target.setStyle({ color: "#888" });
-  //         },
-  //     });
-  // },
-  // filter: (f) => f.properties.gridcode > 0,
-    };
-  },
-})
-.addTo(map);
-
-// Style for SLR 2030 10% AEP
+// Creating variable & style for Coastal Exposure 2050
 var CE_2050 = L.geoJSON(null, {
   style: (feature) => {
     return { 
-      fillColor: "#005EB8",
-      weight: 2,
-      opacity: 0.9,
-      //color: 'white',
-      //dashArray: '3',
-      fillOpacity: 1,
+      filter: (f) => f.properties.gridcode > 0,
     };
   },
   //onEachFeature: onEachFeatureFn,
@@ -166,22 +132,19 @@ var CE_2050 = L.geoJSON(null, {
 //.addTo(map);
 
 
+// Creating variable & style for Coastal Exposure 2070
 var CE_2070 = L.geoJSON(null, {
   style: (feature) => {
     return { 
-      fillColor: "#005EB8",
-      weight: 2,
-      opacity: 0.9,
-      //color: 'white',
-      //dashArray: '3',
-      fillOpacity: 1,
+      filter: (f) => f.properties.gridcode > 0,
     };
   },
   //onEachFeature: onEachFeatureFn,
 })
 //.addTo(map);
 
-// Style for boundary
+
+// Creating variable & style for boundary
 var Boundary = L.geoJSON(null, {
   style: (feature) => {
     return { 
@@ -192,8 +155,11 @@ var Boundary = L.geoJSON(null, {
   onEachFeature: onEachFeatureFn,
 }).addTo(map);
 
-//Layers
-var CE_2030_layer = L.layerGroup([CE_2030_B]);
+
+
+
+// Layers
+var CE_2030_layer = L.layerGroup([CE_2030]);
 var CE_2050_layer = L.layerGroup([CE_2050]);
 var CE_2070_layer = L.layerGroup([CE_2070]);
 var Boundary_9Islands = L.layerGroup([Boundary]);
@@ -220,16 +186,17 @@ var layerControl = L.control
   .expand();
 
  // Adjusts layer visuals 
-var lcDIVElem = layerControl.getContainer();
-      document.addEventListener("keydown", (e) => {
-        if ((e.key === "l") | (e.key === "L")) {
-          if (lcDIVElem.style.display == "") {
-            lcDIVElem.style.display = "none";
-          } else {
-            lcDIVElem.style.display = "";
-          }
-        }
-      });
+// var lcDIVElem = layerControl.getContainer();
+//       document.addEventListener("keydown", (e) => {
+//         if ((e.key === "l") | (e.key === "L")) {
+//           if (lcDIVElem.style.display == "") {
+//             lcDIVElem.style.display = "none";
+//           } else {
+//             lcDIVElem.style.display = "";
+//           }
+//         }
+//       });
+
 
 
 // FETCHING DATA
@@ -241,7 +208,7 @@ fetch("./geojson_files/SLR1_MCE_RiskOutputs_poly.geojson")
   })
   .then((data) => {
     console.log(data);
-    CE_2030.addData(data);
+    //CE_2030.addData(data);
 
     //styling...
     var maxVal = -Infinity,
@@ -258,20 +225,20 @@ fetch("./geojson_files/SLR1_MCE_RiskOutputs_poly.geojson")
 
     var valRange = maxVal - minVal;  
     
-    CE_2030_B.options.style = (f) => {
+    CE_2030.options.style = (f) => {
       return {
           fillColor: d3.interpolateOranges(
               (f.properties.gridcode - minVal) / valRange
           ),
           //color: "#fff",
-          weight: 1,
+          //weight: 0,
           fillOpacity: 0.8,
       };
   };
-
-  CE_2030_B.addData(data);
+  CE_2030.addData(data);
 });
 
+//
 
 // Fetch geojson file for CE 2050
   fetch("./geojson_files/SLR2_MCE_RiskOutputs_poly.geojson")
@@ -280,8 +247,37 @@ fetch("./geojson_files/SLR1_MCE_RiskOutputs_poly.geojson")
   })
   .then((data) => {
     console.log(data);
-    CE_2050.addData(data);
+    //CE_2050.addData(data);
+    
+
+    //styling...
+    var maxVal = -Infinity,
+        minVal = Infinity;
+
+    data.features.forEach((f, i) => {
+      if (
+          f.properties.gridcode != "0"
+      ) {
+          maxVal = Math.max(maxVal, f.properties.gridcode);
+          minVal = Math.min(minVal, f.properties.gridcode);
+      }
     });
+
+    var valRange = maxVal - minVal;  
+    
+    CE_2050.options.style = (f) => {
+      return {
+          fillColor: d3.interpolateOranges(
+              (f.properties.gridcode - minVal) / valRange
+          ),
+          //color: "#fff",
+          //weight: 0,
+          fillOpacity: 0.8,
+      };
+  };
+  CE_2050.addData(data);
+});
+//
 
 // Fetch geojson file for CE 2070
 fetch("./geojson_files/SLR3_MCE_RiskOutputs_poly.geojson")
@@ -290,8 +286,36 @@ fetch("./geojson_files/SLR3_MCE_RiskOutputs_poly.geojson")
 })
 .then((data) => {
   console.log(data);
-  CE_2070.addData(data);
+//  CE_2070.addData(data);
+  
+
+  //styling...
+  var maxVal = -Infinity,
+  minVal = Infinity;
+
+  data.features.forEach((f, i) => {
+  if (
+    f.properties.gridcode != "0"
+  ) {
+    maxVal = Math.max(maxVal, f.properties.gridcode);
+    minVal = Math.min(minVal, f.properties.gridcode);
+  }
   });
+
+  var valRange = maxVal - minVal;  
+
+  CE_2070.options.style = (f) => {
+  return {
+    fillColor: d3.interpolateOranges(
+        (f.properties.gridcode - minVal) / valRange
+    ),
+    //color: "#fff",
+    //weight: 0,
+    fillOpacity: 0.8,
+  };
+};
+CE_2070.addData(data);
+});
 
 // Fetch BOHA Boundary
 fetch("./geojson_files/BOHA_Boundary.geojson")
