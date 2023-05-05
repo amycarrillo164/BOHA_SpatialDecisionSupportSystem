@@ -53,8 +53,8 @@ var map = L.map('map', {
 // display Carto basemap tiles with light features and labels
 var light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
   attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>'
-}); // EDIT - insert or remove ".addTo(map)" before last semicolon to display by default
-
+}) // EDIT - insert or remove ".addTo(map)" before last semicolon to display by default
+.addTo(map);
 
 /* Stamen colored terrain basemap tiles with labels */
 var terrain = L.tileLayer('https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png', {
@@ -63,7 +63,8 @@ var terrain = L.tileLayer('https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}
 
 var googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
     subdomains:['mt0','mt1','mt2','mt3'],
-}).addTo(map); 
+});
+//.addTo(map); 
 
 //Layer group
 var baseMaps = {
@@ -179,7 +180,7 @@ var overlayMaps = {
 //Layer box for all layer groups
 var layerControl = L.control
   .layers(baseMaps, overlayMaps, {
-    collapsed: false,
+    collapsed: true,
     hideSingleBase: true,
   })
   .addTo(map)
@@ -197,7 +198,22 @@ var layerControl = L.control
 //         }
 //       });
 
+// Legend
+var legend = L.control({ position: "bottomleft" });
 
+legend.onAdd = function(map) {
+  var div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h4>Risk Levels</h4>";
+  div.innerHTML += '<i style="background: #990000"></i><span>Very High Risk</span><br>';
+  div.innerHTML += '<i style="background: #d7301f"></i><span>High Risk</span><br>';
+  div.innerHTML += '<i style="background: #ef6548"></i><span>Intermediate Risk</span><br>';
+  div.innerHTML += '<i style="background: #fdbb84"></i><span>Low Risk</span><br>';
+  div.innerHTML += '<i style="background: #fee8c8"></i><span>Very Low Risk</span><br>';
+  
+  return div;
+};
+
+legend.addTo(map);
 
 // FETCHING DATA
 
@@ -227,7 +243,7 @@ fetch("./geojson_files/SLR1_MCE_RiskOutputs_poly.geojson")
     
     CE_2030.options.style = (f) => {
       return {
-          fillColor: d3.interpolateOranges(
+          fillColor: d3.interpolateOrRd(
               (f.properties.gridcode - minVal) / valRange
           ),
           //color: "#fff",
@@ -267,7 +283,7 @@ fetch("./geojson_files/SLR1_MCE_RiskOutputs_poly.geojson")
     
     CE_2050.options.style = (f) => {
       return {
-          fillColor: d3.interpolateOranges(
+          fillColor: d3.interpolateOrRd(
               (f.properties.gridcode - minVal) / valRange
           ),
           //color: "#fff",
@@ -306,7 +322,7 @@ fetch("./geojson_files/SLR3_MCE_RiskOutputs_poly.geojson")
 
   CE_2070.options.style = (f) => {
   return {
-    fillColor: d3.interpolateOranges(
+    fillColor: d3.interpolateOrRd(
         (f.properties.gridcode - minVal) / valRange
     ),
     //color: "#fff",
