@@ -45,7 +45,7 @@ var map = L.map('map', {
     // maxZoom: 20,
     // zoomDelta: 1,
     // zoomControl: true,
-    // fullscreenControl: true,
+    fullscreenControl: true,
     // fullscreenControlOptions: {
     // position: "topleft",
     // },
@@ -339,7 +339,7 @@ fetch("./geojson_files/SLR3_MCE_RiskOutputs_poly.geojson")
 });
 
 // Fetch BOHA Boundary
-fetch("./geojson_files/BOHA_Boundary.geojson")
+fetch("public/BOHA_Boundary.geojson")
 .then((response) => {
   return response.json();
 })
@@ -357,38 +357,50 @@ fetch("./geojson_files/BOHA_Boundary.geojson")
     //Search bar
 
 //... adding data in searchLayer ...
-map.addControl(new L.Control.Search({layer: Boundary}));
+//map.addControl(new L.Control.Search({layer: Boundary_9Islands}));
 //searchLayer is a L.LayerGroup contains searched markers
 
 var searchControl = new L.Control.Search({
   layer: Boundary,
   propertyName: 'Island',
-  position: 'topright',
+  position: 'topleft',
   marker: false,
   moveToLocation: function (latlng, map) {
       map.fitBounds( latlng.layer.getBounds() );
       let zoom = map.getBoundsZoom(latlng.layer.getBounds());
       map.setView(latlng, zoom); // access the zoom
-  }
+  },
+    filterData: function (text, records) {
+      var jsons = fuse.search(text),
+        ret = {}, key;
+
+      for (var i in jsons) {
+        key = jsons[i].properties.NAME;
+          ret[key] = records[key];
+                }
+
+      console.log(jsons, ret);
+          return ret;
+    }
 });
 
 searchControl.on('search:locationfound', function (e) {
 
-  //console.log('search:locationfound', );
-
-  //map.removeLayer(this._markerSearch)
   e.layer.setStyle({ fillColor: '#3f0', color: '#0f0' });
   if (e.layer._popup)
       e.layer.openPopup();
 
 }).on('search:collapsed', function (e) {
 
-  featuresLayer.eachLayer(function (layer) {	//restore feature color
-      featuresLayer.resetStyle(layer);
+  Boundary.eachLayer(function (layer) {	//restore feature color
+      Boundary.resetStyle(layer);
   });
 });
 
 map.addControl(searchControl);  //inizialize search control
+
+
+
 
 var osmGeocoderControl = new L.Control.Search({
   url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}&countrycodes=us',
