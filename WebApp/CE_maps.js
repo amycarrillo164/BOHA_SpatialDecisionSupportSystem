@@ -1,4 +1,5 @@
 // Functions
+
 function onEachFeatureFn(feature, layer) {
   var popupContent =
     //"<p> Island: " +
@@ -22,7 +23,7 @@ function onEachFeatureFn(feature, layer) {
   layer.on({
     mouseover: function (e) {
       e.target.setStyle({ 
-        Color: "#ffffff",
+        Color: "#fff",
         opacity: 0.9, 
         weight: 3,
       });
@@ -75,49 +76,17 @@ var baseMaps = {
 };
 
 
-
-// Adding Data...
-
-//Points (CVS)
-// Read markers data from data.csv
-$.get('geojson_files/cultural_points.csv', function(csvString) {
-  // Use PapaParse to convert string to array of objects
-  var data = Papa.parse(csvString, {header: true, dynamicTyping: true}).data;
-  // For each row in data, create a marker and add it to the map
-  // For each row, columns `Latitude`, `Longitude`, and `Title` are required
-  for (var i in data) {
-    var row = data[i];
-    var marker = L.circleMarker([row.Latitude, row.Longitude], {
-      radius: 3,
-      fillColor: 'purple',
-      color: 'purple',
-      weight: 0.1,
-      opacity: 1,
-      fillOpacity: 0.5,
-      pane: 'markerPane',
-      // }).bindTooltip(feature.properties.NAME)
-  
-    //customize your icon
-    // icon: L.icon({
-    //   iconUrl: "https://img.icons8.com/plasticine/100/null/map-pin.png",
-    //   iconSize: [12, 10]
-    // })
-    }).bindPopup(row.Island);    
-    marker.addTo(map);
-    }
-  });
-
-
 // Polygons (Geojson)
 // Creating variable & style for Coastal Exposure 2030
 var CE_2030 = L.geoJSON(null, {
   style: (feature) => {
     return {
-      filter: (f) => f.properties.gridcode > 0,
+      //filter: (f) => f.properties.gridcode > 0,
     };
   },
   //onEachFeature: onEachFeatureFn,
-})
+  } 
+)
 .addTo(map);
 
 
@@ -125,7 +94,7 @@ var CE_2030 = L.geoJSON(null, {
 var CE_2050 = L.geoJSON(null, {
   style: (feature) => {
     return { 
-      filter: (f) => f.properties.gridcode > 0,
+      //filter: (f) => f.properties.gridcode > 0,
     };
   },
   //onEachFeature: onEachFeatureFn,
@@ -137,7 +106,7 @@ var CE_2050 = L.geoJSON(null, {
 var CE_2070 = L.geoJSON(null, {
   style: (feature) => {
     return { 
-      filter: (f) => f.properties.gridcode > 0,
+      //filter: (f) => f.properties.gridcode > 0,
     };
   },
   //onEachFeature: onEachFeatureFn,
@@ -157,15 +126,13 @@ var Boundary = L.geoJSON(null, {
 }).addTo(map);
 
 
-
-
 // Layers
 var CE_2030_layer = L.layerGroup([CE_2030]);
 var CE_2050_layer = L.layerGroup([CE_2050]);
 var CE_2070_layer = L.layerGroup([CE_2070]);
 var Boundary_9Islands = L.layerGroup([Boundary]);
 //var marker_points = L.layerGroup([marker])
-
+var Boundary_search = L.layerGroup([Boundary]);
 
 //Layer groups
 var overlayMaps = {
@@ -186,6 +153,7 @@ var layerControl = L.control
   .addTo(map)
   .expand();
 
+
  // Adjusts layer visuals 
 // var lcDIVElem = layerControl.getContainer();
 //       document.addEventListener("keydown", (e) => {
@@ -198,6 +166,7 @@ var layerControl = L.control
 //         }
 //       });
 
+
 // Legend
 var legend = L.control({ position: "bottomleft" });
 
@@ -206,7 +175,6 @@ legend.onAdd = function(map) {
   div.innerHTML += "<h4>Risk Levels</h4>";
   div.innerHTML += '<i style="background: #990000"></i><span>Very High Risk</span><br>';
   div.innerHTML += '<i style="background: #d7301f"></i><span>High Risk</span><br>';
-  div.innerHTML += '<i style="background: #ef6548"></i><span>Intermediate Risk</span><br>';
   div.innerHTML += '<i style="background: #fdbb84"></i><span>Low Risk</span><br>';
   div.innerHTML += '<i style="background: #fee8c8"></i><span>Very Low Risk</span><br>';
   
@@ -216,6 +184,41 @@ legend.onAdd = function(map) {
 legend.addTo(map);
 
 // FETCHING DATA
+// Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at 
+//file:///C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_Project/BOHA_SpatialDecisionSupportSystem/WebApp/geojson_files/BOHA_Boundary.geojson. 
+//(Reason: CORS request not http).
+
+// NOTE: Had to use js file data method for the data to appear on a public website
+
+
+//Points (CVS)
+// Read markers data from data.csv
+$.get('geojson_files/cultural_points.csv', function(csvString) {
+  // Use PapaParse to convert string to array of objects
+  var data = Papa.parse(csvString, {header: true, dynamicTyping: true}).data;
+  // For each row in data, create a marker and add it to the map
+  // For each row, columns `Latitude`, `Longitude`, and `Title` are required
+  for (var i in data) {
+    var row = data[i];
+    var marker = L.circleMarker([row.Latitude, row.Longitude], {
+      radius: 3,
+      fillColor: '#0d6efd',
+      color: '#0d6efd',
+      weight: 0.1,
+      opacity: 1,
+      fillOpacity: 0.5,
+      pane: 'markerPane',
+      // }).bindTooltip(feature.properties.NAME)
+  
+    //customize your icon
+    // icon: L.icon({
+    //   iconUrl: "https://img.icons8.com/plasticine/100/null/map-pin.png",
+    //   iconSize: [12, 10]
+    // })
+    }).bindPopup(row.Category);    
+    marker.addTo(map);
+    }
+  });
 
 // Fetch geojson file for CE 2030
 fetch("./geojson_files/SLR1_MCE_RiskOutputs_poly.geojson")
@@ -249,6 +252,7 @@ fetch("./geojson_files/SLR1_MCE_RiskOutputs_poly.geojson")
           //color: "#fff",
           //weight: 0,
           fillOpacity: 0.8,
+          color: false,
       };
   };
   CE_2030.addData(data);
@@ -256,8 +260,9 @@ fetch("./geojson_files/SLR1_MCE_RiskOutputs_poly.geojson")
 
 //
 
+
 // Fetch geojson file for CE 2050
-  fetch("./geojson_files/SLR2_MCE_RiskOutputs_poly.geojson")
+fetch("./geojson_files/SLR2_MCE_RiskOutputs_poly.geojson")
   .then((response) => {
     return response.json();
   })
@@ -286,7 +291,7 @@ fetch("./geojson_files/SLR1_MCE_RiskOutputs_poly.geojson")
           fillColor: d3.interpolateOrRd(
               (f.properties.gridcode - minVal) / valRange
           ),
-          //color: "#fff",
+          color: false,
           //weight: 0,
           fillOpacity: 0.8,
       };
@@ -297,40 +302,40 @@ fetch("./geojson_files/SLR1_MCE_RiskOutputs_poly.geojson")
 
 // Fetch geojson file for CE 2070
 fetch("./geojson_files/SLR3_MCE_RiskOutputs_poly.geojson")
-.then((response) => {
-  return response.json();
-})
-.then((data) => {
-  console.log(data);
-//  CE_2070.addData(data);
-  
+  .then((response) => {
+    return response.json();
+  })
+  .then((data) => {
+    console.log(data);
+  //  CE_2070.addData(data);
+    
 
-  //styling...
-  var maxVal = -Infinity,
-  minVal = Infinity;
+    //styling...
+    var maxVal = -Infinity,
+    minVal = Infinity;
 
-  data.features.forEach((f, i) => {
-  if (
-    f.properties.gridcode != "0"
-  ) {
-    maxVal = Math.max(maxVal, f.properties.gridcode);
-    minVal = Math.min(minVal, f.properties.gridcode);
-  }
-  });
+    data.features.forEach((f) => {
+    if (
+      f.properties.gridcode != "0"
+    ) {
+      maxVal = Math.max(maxVal, f.properties.gridcode);
+      minVal = Math.min(minVal, f.properties.gridcode);
+    }
+    });
 
-  var valRange = maxVal - minVal;  
+    var valRange = maxVal - minVal;  
 
-  CE_2070.options.style = (f) => {
-  return {
-    fillColor: d3.interpolateOrRd(
-        (f.properties.gridcode - minVal) / valRange
-    ),
-    //color: "#fff",
-    //weight: 0,
-    fillOpacity: 0.8,
+    CE_2070.options.style = (f) => {
+    return {
+      fillColor: d3.interpolateOrRd(
+          (f.properties.gridcode - minVal) / valRange
+      ),
+      color: false,
+      //weight: 0,
+      fillOpacity: 0.8,
+    };
   };
-};
-CE_2070.addData(data);
+  CE_2070.addData(data);
 });
 
 // Fetch BOHA Boundary
@@ -348,93 +353,63 @@ fetch("./geojson_files/BOHA_Boundary.geojson")
 // STOP
 
 
-// NEED TO WORK ON
-    // Search bar
-// var searchControl = new L.Control.Search({
-//   layer: Boundary,
-//   propertyName: 'Island',
-//   position: 'topright',
-//   marker: false,
-//   moveToLocation: function (latlng, map) {
-//       map.fitBounds( latlng.layer.getBounds() );
-//       let zoom = map.getBoundsZoom(latlng.layer.getBounds());
-//       map.setView(latlng, zoom); // access the zoom
-//   }
-// });
+// Local Search - NEED TO WORK ON
+    //Search bar
 
-// searchControl.on('search:locationfound', function (e) {
+//... adding data in searchLayer ...
+map.addControl(new L.Control.Search({layer: Boundary}));
+//searchLayer is a L.LayerGroup contains searched markers
 
-//   //console.log('search:locationfound', );
+var searchControl = new L.Control.Search({
+  layer: Boundary,
+  propertyName: 'Island',
+  position: 'topright',
+  marker: false,
+  moveToLocation: function (latlng, map) {
+      map.fitBounds( latlng.layer.getBounds() );
+      let zoom = map.getBoundsZoom(latlng.layer.getBounds());
+      map.setView(latlng, zoom); // access the zoom
+  }
+});
 
-//   //map.removeLayer(this._markerSearch)
-//   e.layer.setStyle({ fillColor: '#3f0', color: '#0f0' });
-//   if (e.layer._popup)
-//       e.layer.openPopup();
+searchControl.on('search:locationfound', function (e) {
 
-// }).on('search:collapsed', function (e) {
+  //console.log('search:locationfound', );
 
-//   featuresLayer.eachLayer(function (layer) {	//restore feature color
-//       featuresLayer.resetStyle(layer);
-//   });
-// });
+  //map.removeLayer(this._markerSearch)
+  e.layer.setStyle({ fillColor: '#3f0', color: '#0f0' });
+  if (e.layer._popup)
+      e.layer.openPopup();
 
-// map.addControl(searchControl);  //inizialize search control
+}).on('search:collapsed', function (e) {
 
-// map.addControl(new L.Control.Search({
-//   url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}&countrycodes=us',
-//   position: 'topleft',
-//   jsonpParam: 'json_callback',
-//   propertyName: 'display_name',
-//   propertyLoc: ['lat', 'lon'],
-//   marker: L.circleMarker([0, 0], { radius: 30 }),
-//   autoCollapse: true,
-//   autoType: false,
-//   minLength: 2,
-//   container: '',
-//   moveToLocation: function (latlng, title, map) {
-//       //map.fitBounds( latlng.layer.getBounds() );
-//       let zoom = 12; //map.getBoundsZoom(latlng.layer.getBounds());
-//       map.setView(latlng, zoom); // access the zoom
-//   }
-// }));
+  featuresLayer.eachLayer(function (layer) {	//restore feature color
+      featuresLayer.resetStyle(layer);
+  });
+});
 
-// const geosearchCtrl = new GeoSearch.GeoSearchControl({
-//   provider: new GeoSearch.OpenStreetMapProvider({
-//       params: {
-//           'accept-language': 'en', // render results in Dutch
-//           countrycodes: 'us', // limit search results to the Netherlands
-//           addressdetails: 0, // include additional address detail parts
-//       },
-//   }),
-//   position: "topright",
-//   style: 'bar',
-//   marker: {
-//       // optional: L.Marker    - default L.Icon.Default
-//       icon: new L.Icon.Default(),
-//       draggable: false,
-//   },
-// });
+map.addControl(searchControl);  //inizialize search control
 
-// map.addControl(geosearchCtrl);
+var osmGeocoderControl = new L.Control.Search({
+  url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}&countrycodes=us',
+  jsonpParam: 'json_callback',
+  propertyName: 'display_name',
+  propertyLoc: ['lat', 'lon'],
+  marker: L.circleMarker([0, 0], { radius: 30 }),
+  autoCollapse: true,
+  autoType: false,
+  minLength: 2,
+  position: 'topright',
+  container: '',
+  moveToLocation: (latlng, name, map) => {
+      USstatesLayerB.eachLayer((l) => {
+          console.log(Date.now());
+          if (turf.booleanPointInPolygon(turf.point([latlng.lng, latlng.lat]), l.feature)) {
+              l.setStyle({ fillColor: "#555" });
+              map.fitBounds(l.getBounds());
+          }
+      });
+  }
+});
 
-// map.on('geosearch/showlocation', (rslt) => {
-//   let latlng = [rslt.location.y, rslt.location.x];
-//   Boundary.eachLayer((l) => {
-//       let pt = turf.point([rslt.location.x, rslt.location.y]);
-
-//       if (turf.booleanPointInPolygon(pt, l.feature)) {
-//           map.fitBounds(l.getBounds());
-//           l.setStyle({ color: '#F00' })
-//       }
-//   });
-// });
-
-// // Fetch BOHA Boundary
-// fetch("./geojson_files/BOHA_Boundary.geojson")
-// .then((response) => {
-//   return response.json();
-// })
-// .then((data) => {
-//   console.log(data);
-//   Boundary.addData(data);
-//   });
+map.addControl(osmGeocoderControl);

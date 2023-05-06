@@ -1,0 +1,22 @@
+{
+  "name": "boha_spatialdecisionsupportsystem",
+  "version": "1.0.0",
+  "description": "BOHA Spatial Decision Support System",
+  "main": "index.js",
+  "scripts": {
+    "devStart": "nodemon serve.js"
+  },
+  "author": "Amy Carrillo",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "grunt": "^1.6.1",
+    "leaflet-search": "^3.0.9",
+    "mongoose": "^7.1.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.3",
+    "nodemon": "^2.0.22"
+  }
+}

@@ -25,6 +25,11 @@ html {
     z-index: -1;
   }
   
+  #post-it {
+    padding-top: 10px;
+  }
+
+
   /* SLR Map Style */
   
   #SLR1_titleid{
@@ -60,14 +65,14 @@ html {
   
   .SLRtab_content{
     font-weight: 500;
-    padding-left: 200px;
+    /* padding-left: 200px; */
     padding-top: 30px;
     padding-bottom: 30px;  
   }
   
   .card_body{
     font-weight: 500;
-    padding-top: 10px;
+    padding-top: 5px;
     padding-bottom: 30px; 
   }
   

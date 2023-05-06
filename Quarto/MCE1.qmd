@@ -49,7 +49,7 @@ env.scratchWorkspace ="C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_P
         inSourceData_BR = "Vector_Data.gdb/Bluffs_Retreating"
         cellSize = 1
         mask_features = "Vector_Data.gdb/Amy_BOHA9_POLYS"
-        # Local output locations
+        # Local output save locations
         in_raster_BR = "C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_Project/BOHA_SpatialDecisionSupportSystem/Data/Raster_Scratch.gdb/BR_EucDistOut"
         BluffRetreat_Grid = "C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_Project/BOHA_SpatialDecisionSupportSystem/Data/Raster_Outputs.gdb/BluffRetreat_Grid"
 
@@ -71,7 +71,7 @@ env.scratchWorkspace ="C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_P
         inSourceData_SS = "Vector_Data.gdb/Sandy_Shoreline"
         mask_features = "Vector_Data.gdb/Amy_BOHA9_POLYS"
         cellSize = 1
-        # Local output locations
+        # Local output save locations
         in_raster_SS = "C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_Project/BOHA_SpatialDecisionSupportSystem/Data/Raster_Scratch.gdb/SS_EucDistOut"
         SandyShoreline_Grid = "C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_Project/BOHA_SpatialDecisionSupportSystem/Data/Raster_Outputs.gdb/SandyShoreline_Grid"
 
@@ -87,6 +87,8 @@ env.scratchWorkspace ="C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_P
         ```
 
         *Input 3: Unvegetated land cover (0 = dense vegetation, 0.5 = partial vegetation, 1 = no vegetation)*
+
+        \[land use information\]
 
         ``` python
         # Local variables
@@ -131,33 +133,64 @@ env.scratchWorkspace ="C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_P
         *Input 5: Sea Level Rise 10% AEP*
 
         ``` python
-        # Sea Level Rise Scenario 2030
+        #Setting the environment
+        for Raster, Name in MassCZM_folder
+        for Raster, Name in #  NOT  IMPLEMENTED(MassCZM_CFEP_gdb, "tif*", "", "NOT_RECURSIVE"):
+
+            #Local variables
+            Name = "Raster"
+            #Local output locations
+            CellStatistic_Ouput = fr"C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_Project/BOHA_SpatialDecisionSupportSystem/Data/Raster_Scratch.gdb/{Name}CellStats"
+            CellStats = CellStatistic_Ouput  
+            c_10CFEP = "C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_Project/BOHA_SpatialDecisionSupportSystem/Data/Raster_Outputs.gdb/{Name}c_10CFEP"
+            Reclassify_c_10CFEP = c_10CFEP
+
+            # Step 1: Cell Statistics. This process will calculate a cell-by-cell mean statistic from multiple rasters...the Mass_CZM Coastal Flood Excedence RGB raster data
+            CellStatistic_Ouput = arcpy.sa.CellStatistics(in_rasters_or_constants = [Raster], statistics_type = "MEAN",
+                                                          ignore_nodata = "DATA", process_as_multiband = "SINGLE_BAND",
+                                                          percentile_value = 90,
+                                                          percentile_interpolation_type = "AUTO_DETECT")
+            CellStatistic_Ouput.save(CellStats)
 
 
-        # Sea Level Rise Scenario 2050
+            # Step 2: Reclassify and assign cell statistic values to reflect 10% CFEP
+            c2030_10CFEP = arcpy.sa.Reclassify(in_raster = CellStatistic_Output, reclass_field = "VALUE", remap = "0 0;28.666666 0;84.333336 0;85.666664 1;86.666664 0;136 1;140.333328 1;148 0;169.666672 0;170 0;172.666672 0;199 0;208.333328 1", missing_values = "DATA")
 
-
-        # Sea Level Rise Scenario 2070
+            c_10CFEP.save(Reclassify_c_10CFEP)
         ```
 
 -   **R3. Sea Level Rise 1% AEP**
 
     ``` python
-    # Sea Level Rise Scenario 2030
+    #    "                                                                                       "
 
+        #Local Variables
+        Name = "Raster"
+        #Local Ouputs
+        c2030_1CFEP = "C:\\Users\\amyca\\Dropbox (Hunter College)\\BOHA_Final_Project_Products\\Raster_Calculator_Grids\\MassCZM_CFEP.gdb\\c2030_1CFEP"
+        Reclassify_c_1CFEP = c_1CFEP
 
-    # Sea Level Rise Scenario 2050
+        # Step 3. Reclassify and assign cell statistic values to reflect 10% CFEP
+        c_1CFEP = arcpy.sa.Reclassify(in_raster = CellStatistic_Ouput, reclass_field = "VALUE",
+                                             remap="0 0;28.666666 0;84.333336 1;85.666664 1;86.666664 1;136 1;140.333328 1;148 1;169.666672 1;170 1;172.666672 1;199 1;208.333328 1", missing_values="DATA")
 
-
-    # Sea Level Rise Scenario 2070
+        c_1CFEP.save(c_1CFEP)
     ```
 
 ## ArcGIS Geoprocessing Tool
 
-\[Description of why I created the tool\]
+If you would like to use your own data please feel free to use the above scripts as a guideline for cleaning up your vector data to meet the tool requirements. Assuming you are using my data or your own that's in raster format, you are available to download this tool to develop your own MCE weight analysis coastal exposure risk layers. The only requirement is to have your own raster data available.
+
+The raster data must have a level system of 0 to 1 in order to be accurately valued. The raster data must also fall along the categories of:
+
+-   Natural resources, cultural resources, and infrastructure/facilities
+-   Sandy or other highly erodible sediment for shoreline type
+-   Vegetation levels
+-   Bluff Retreat Zones
+-   Sea Level Rise Scenarios (CFEP)
 
 ``` python
-# Script for the tool
+# Script for the tool: develop weights for your categories...
 ```
 
 Click [here]{.smallcaps} to Download the ArcGIS Geoprocessing Tool: "Boston Harbor Coastal Exposure Risk Tool."
