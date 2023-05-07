@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "leaflet-knn": "^0.1.0"
+  }
+}
