@@ -107,12 +107,6 @@ var map = L.map('map', {
     //fullscreenControl: true,
     center: [42.3131628, -70.9297749], 
     zoom: 13,
-    // maxZoom: 20,
-    // zoomDelta: 1,
-    // zoomControl: true,
-    //fullscreenControlOptions: {
-      //position: 'bottomright'
-    //},
 });
 
 
@@ -321,28 +315,6 @@ legend.onAdd = function(map) {
 
 legend.addTo(map);
 
-/// GETTING DATA
-
-var fuse;
-
-$.getJSON("geojson_files/BOHA_Boundary.geojson", function (data) {
-
-    console.log(data);
-    console.log(data.features.length);
-
-    // Do NOT create the GeoJSON layer here.
-    // Create it outside and then fill the data
-    Boundary.addData(data);
-
-    fuse = new Fuse(data.features, {
-        keys: [
-            'properties.Island',
-            //'properties.GEO_ID',
-            //'properties.STATE'
-            //'properties.operator'
-        ]
-    });
-});
 
 // FETCHING DATA
 // Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at 
