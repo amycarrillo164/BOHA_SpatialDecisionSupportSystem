@@ -36,6 +36,30 @@ var baseMaps = {
 
 };
 
+function style_feature_SLR1(feature) {
+  return {
+    fillColor: '#003E78', //'#5fbaff' 
+    weight: 2,
+    opacity: 1,
+    //color: 'white',
+    dashArray: '3',
+    fillOpacity: 1,
+    //color: "#000", fill: "#ccc", fillOpacity: 0.2 
+  };
+}
+
+
+function style_feature_SLR10(feature) {
+  return {
+    fillColor: "#005EB8",
+    weight: 2,
+    opacity: 0.9,
+    //color: 'white',
+    //dashArray: '3',
+    fillOpacity: 1,
+  };
+}
+
 function onEachFeatureFn(feature, layer) {
   var popupContent =
     //"<p> Island: " +
@@ -103,36 +127,39 @@ $.get('geojson_files/cultural_points.csv', function(csvString) {
     }
   });
 
-// Style for SLR 2030 1% AEP
-var SLR2030_1 = L.geoJSON(null, {
-  style: (feature) => {
-    return { 
-      fillColor: '#003E78', //'#5fbaff' 
-      weight: 2,
-      opacity: 1,
-      //color: 'white',
-      dashArray: '3',
-      fillOpacity: 1,
-      //color: "#000", fill: "#ccc", fillOpacity: 0.2 
-    };
-  },
-  //onEachFeature: onEachFeatureFn,
-}).addTo(map);
+var SLR2030_1 = L.geoJSON(SLR2030_1CFEP, {style: style_feature_SLR1,}) .addTo(map);
+var SLR2030_10 = L.geoJSON(SLR2030_10CFEP, {style: style_feature_SLR10,}) .addTo(map);
 
-// Style for SLR 2030 10% AEP
-var SLR2030_10 = L.geoJSON(null, {
-  style: (feature) => {
-    return { 
-      fillColor: "#005EB8",
-      weight: 2,
-      opacity: 0.9,
-      //color: 'white',
-      //dashArray: '3',
-      fillOpacity: 1,
-    };
-  },
-  //onEachFeature: onEachFeatureFn,
-}).addTo(map);
+// // Style for SLR 2030 1% AEP
+// var SLR2030_1 = L.geoJSON([SLR2030_1CFEP], {
+//   style: (feature) => {
+//     return { 
+//       fillColor: '#003E78', //'#5fbaff' 
+//       weight: 2,
+//       opacity: 1,
+//       //color: 'white',
+//       dashArray: '3',
+//       fillOpacity: 1,
+//       //color: "#000", fill: "#ccc", fillOpacity: 0.2 
+//     };
+//   },
+//   //onEachFeature: onEachFeatureFn,
+// }).addTo(map);
+
+// // Style for SLR 2030 10% AEP
+// var SLR2030_10 = L.geoJSON([SLR2030_10CFEP], {
+//   style: (feature) => {
+//     return { 
+//       fillColor: "#005EB8",
+//       weight: 2,
+//       opacity: 0.9,
+//       //color: 'white',
+//       //dashArray: '3',
+//       fillOpacity: 1,
+//     };
+//   },
+//   //onEachFeature: onEachFeatureFn,
+// }).addTo(map);
 
 // Style for boundary
 var Boundary = L.geoJSON(null, {
@@ -182,119 +209,27 @@ var lcDIVElem = layerControl.getContainer();
         }
       });
 
-// FETCHING DATA
+// // FETCHING DATA
 
-// Fetch geojson file for SLR 2030 1% AEP
-fetch("./geojson_files/c2030_1CFEPpoly.json")
-.then((response) => {
-  return response.json();
-})
-.then((data) => {
-  console.log(data);
-  SLR2030_1.addData(data);
-  });
+// // Fetch geojson file for SLR 2030 1% AEP
+// fetch("./geojson_files/c2030_1CFEPpoly.json")
+// .then((response) => {
+//   return response.json();
+// })
+// .then((data) => {
+//   console.log(data);
+//   SLR2030_1.addData(data);
+//   });
 
-// Fetch geojson file for SLR 2030 10% AEP
-  fetch("./geojson_files/c2030_10CFEPpoly.geojson")
-  .then((response) => {
-    return response.json();
-  })
-  .then((data) => {
-    console.log(data);
-    SLR2030_10.addData(data);
-    });
-
-// Fetch BOHA Boundary
-fetch("./geojson_files/BOHA_Boundary.geojson")
-.then((response) => {
-  return response.json();
-})
-.then((data) => {
-  console.log(data);
-  Boundary.addData(data);
-  });
-
-
-// NEED TO WORK ON
-    // Search bar
-var searchControl = new L.Control.Search({
-  layer: Boundary,
-  propertyName: 'Island',
-  position: 'topright',
-  marker: false,
-  moveToLocation: function (latlng, map) {
-      map.fitBounds( latlng.layer.getBounds() );
-      let zoom = map.getBoundsZoom(latlng.layer.getBounds());
-      map.setView(latlng, zoom); // access the zoom
-  }
-});
-
-searchControl.on('search:locationfound', function (e) {
-
-  //console.log('search:locationfound', );
-
-  //map.removeLayer(this._markerSearch)
-  e.layer.setStyle({ fillColor: '#3f0', color: '#0f0' });
-  if (e.layer._popup)
-      e.layer.openPopup();
-
-}).on('search:collapsed', function (e) {
-
-  featuresLayer.eachLayer(function (layer) {	//restore feature color
-      featuresLayer.resetStyle(layer);
-  });
-});
-
-map.addControl(searchControl);  //inizialize search control
-
-map.addControl(new L.Control.Search({
-  url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}&countrycodes=us',
-  position: 'topleft',
-  jsonpParam: 'json_callback',
-  propertyName: 'display_name',
-  propertyLoc: ['lat', 'lon'],
-  marker: L.circleMarker([0, 0], { radius: 30 }),
-  autoCollapse: true,
-  autoType: false,
-  minLength: 2,
-  container: '',
-  moveToLocation: function (latlng, title, map) {
-      //map.fitBounds( latlng.layer.getBounds() );
-      let zoom = 12; //map.getBoundsZoom(latlng.layer.getBounds());
-      map.setView(latlng, zoom); // access the zoom
-  }
-}));
-
-const geosearchCtrl = new GeoSearch.GeoSearchControl({
-  provider: new GeoSearch.OpenStreetMapProvider({
-      params: {
-          'accept-language': 'en', // render results in Dutch
-          countrycodes: 'us', // limit search results to the Netherlands
-          addressdetails: 0, // include additional address detail parts
-      },
-  }),
-  position: "topright",
-  style: 'bar',
-  marker: {
-      // optional: L.Marker    - default L.Icon.Default
-      icon: new L.Icon.Default(),
-      draggable: false,
-  },
-});
-
-map.addControl(geosearchCtrl);
-
-map.on('geosearch/showlocation', (rslt) => {
-  let latlng = [rslt.location.y, rslt.location.x];
-  Boundary.eachLayer((l) => {
-      let pt = turf.point([rslt.location.x, rslt.location.y]);
-
-      if (turf.booleanPointInPolygon(pt, l.feature)) {
-          map.fitBounds(l.getBounds());
-          l.setStyle({ color: '#F00' })
-      }
-  });
-});
+// // Fetch geojson file for SLR 2030 10% AEP
+//   fetch("./geojson_files/c2030_10CFEPpoly.geojson")
+//   .then((response) => {
+//     return response.json();
+//   })
+//   .then((data) => {
+//     console.log(data);
+//     SLR2030_10.addData(data);
+//     });
 
 // // Fetch BOHA Boundary
 // fetch("./geojson_files/BOHA_Boundary.geojson")
@@ -305,3 +240,5 @@ map.on('geosearch/showlocation', (rslt) => {
 //   console.log(data);
 //   Boundary.addData(data);
 //   });
+
+

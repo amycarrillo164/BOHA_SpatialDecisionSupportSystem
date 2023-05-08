@@ -252,8 +252,8 @@
           loc = data[i].loc,		//position found
           marker = new L.circleMarker(new L.latLng(loc), 
           {
-            title: title,
             color: false,
+            fillOpacity: 0,
           }
            );//se property searched
         marker.bindPopup('Island: '+ title );
