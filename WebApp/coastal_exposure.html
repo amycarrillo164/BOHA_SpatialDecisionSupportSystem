@@ -196,6 +196,7 @@
 
     <!-- find near points -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/1.2.2/fuse.min.js"></script>
+    
     <!-- search bar -->
     <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>    
     <script src="./js/leaflet-search.js"></script>
@@ -255,18 +256,6 @@
                 var zoom = map.getBoundsZoom(latlng.layer.getBounds());
                 map.setView(latlng, zoom); // access the zoom
             },
-        // filterData: function (text, records) {
-        //       var jsons = fuse.search(text),
-        //           ret = {}, key;
-
-        //       for (var i in jsons) {
-        //           key = jsons[i].properties.NAME;
-        //           ret[key] = records[key];
-        //       }
-
-        //       console.log(jsons, ret);
-        //       return ret;
-        //     }
         });
       map.addControl(controlSearch);
 

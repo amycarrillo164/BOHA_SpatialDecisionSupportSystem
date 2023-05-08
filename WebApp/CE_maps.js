@@ -321,6 +321,29 @@ legend.onAdd = function(map) {
 
 legend.addTo(map);
 
+/// GETTING DATA
+
+var fuse;
+
+$.getJSON("geojson_files/BOHA_Boundary.geojson", function (data) {
+
+    console.log(data);
+    console.log(data.features.length);
+
+    // Do NOT create the GeoJSON layer here.
+    // Create it outside and then fill the data
+    Boundary.addData(data);
+
+    fuse = new Fuse(data.features, {
+        keys: [
+            'properties.Island',
+            //'properties.GEO_ID',
+            //'properties.STATE'
+            //'properties.operator'
+        ]
+    });
+});
+
 // FETCHING DATA
 // Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at 
 //file:///C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_Project/BOHA_SpatialDecisionSupportSystem/WebApp/geojson_files/BOHA_Boundary.geojson. 
