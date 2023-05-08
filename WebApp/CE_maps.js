@@ -36,7 +36,7 @@ function onEachFeatureFn(feature, layer) {
   });
 }
 
-// <!-- script for circle markers -->
+// script for circle markers
 var geojsonMarkerOptions = {
   radius: 3,
   fillColor: "#blue",
