@@ -92,15 +92,14 @@ function style_feature_frpolys(feature) {
 }
 
 
-
 // script for circle markers
 var geojsonMarkerOptions = {
   radius: 3,
-  // fillColor: "#blue",
-  // color: "#blue",
+  fillColor: "#6693f5",
+  color: "#fff",
   weight: 1,
   opacity: .7,
-  fillOpacity: 0.4,
+  fillOpacity: 0.8,
 };
 
 // Set up initial map
@@ -181,7 +180,7 @@ info.onAdd = function (map) {
 
 info.update = function (props) {
   //const contents = props ? `<b>${props.Island}</b><br />${props.Descriptio}` : 'Hover over a Focal Resource';
-  const contents = props ? `<b>${props.Descriptio}</b>` : 'Hover over a Focal Resource';
+  const contents = props ? `<b>${props.Descriptio}</b>` : '1. Turn on Polygon Layers <br> 2. Hover Over a Focal Resource';
   this._div.innerHTML = `<h4>Focal Resource Info</h4>${contents}`;
 };
 
@@ -198,14 +197,14 @@ var fr_points = L.geoJson(fr_points, {
 
 //category polygons
 var nat_polygons = L.geoJson(nat_polys, {style: style_feature_frpolys, onEachFeature: onEachFeaturePoly,})
-.addTo(map);
+//.addTo(map);
 
 
 var infra_polygons = L.geoJson(infra_polys, {style: style_feature_frpolys, onEachFeature: onEachFeaturePoly,})
-.addTo(map);
+//.addTo(map);
 
 var cultural_polygons = L.geoJson(cultural_polys, {style: style_feature_frpolys, onEachFeature: onEachFeaturePoly,})
-.addTo(map);
+//.addTo(map);
 
 // Polygons (Geojson)
 // Creating variable & style for Coastal Exposure 2030

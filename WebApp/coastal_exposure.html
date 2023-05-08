@@ -7,7 +7,7 @@
     
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="dashboard.css" >
+    <link rel="stylesheet" href="css/dashboard.css" >
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 
     <!-- Map CSS -->    
@@ -200,6 +200,9 @@
     <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>    
     <script src="./js/leaflet-search.js"></script>
     <link href='./css/leaflet-search.css' rel='stylesheet' />
+
+    <!-- draw and select features -->
+    <script src="./lib/js/Leaflet.SelectAreaFeature.js"></script>
     
     <!-- full screen control -->
     <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
@@ -267,7 +270,6 @@
         });
       map.addControl(controlSearch);
 
-      
 
       //populate map with markers from sample data
       // for(i in data) {
