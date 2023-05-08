@@ -109,11 +109,11 @@ $.get('geojson_files/cultural_points.csv', function(csvString) {
     var row = data[i];
     var marker = L.circleMarker([row.Latitude, row.Longitude], {
       radius: 3,
-      fillColor: 'purple',
-      color: 'purple',
+      fillColor: '#fff',
+      color: '#fff',
       weight: 0.1,
       opacity: 1,
-      fillOpacity: 0.5,
+      fillOpacity: 0.6,
       pane: 'markerPane',
       // }).bindTooltip(feature.properties.NAME)
   
@@ -231,14 +231,14 @@ var lcDIVElem = layerControl.getContainer();
 //     SLR2030_10.addData(data);
 //     });
 
-// // Fetch BOHA Boundary
-// fetch("./geojson_files/BOHA_Boundary.geojson")
-// .then((response) => {
-//   return response.json();
-// })
-// .then((data) => {
-//   console.log(data);
-//   Boundary.addData(data);
-//   });
+// Fetch BOHA Boundary
+fetch("./geojson_files/BOHA_Boundary.geojson")
+.then((response) => {
+  return response.json();
+})
+.then((data) => {
+  console.log(data);
+  Boundary.addData(data);
+  });
 
 

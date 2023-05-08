@@ -1,5 +1,5 @@
-// Functions
 
+// Function for Island Boundary
 function onEachFeatureFn(feature, layer) {
   var popupContent =
     //"<p> Island: " +
@@ -36,17 +36,62 @@ function onEachFeatureFn(feature, layer) {
   });
 }
 
+
+//Function for polygons
+
+function onEachFeaturePoly(feature, layer) {
+  var popupContent =
+  "<p> Focal Resource </p>"
+    // "<p> Island: " +
+    // feature.properties.Island;
+    //  +
+    // "</br> Category: " +
+    // feature.properties.Category;
+    // "</br> Name: " +
+    // feature.properties.Descriptio +
+    // "</p>";
+
+  if (feature.properties && feature.properties.popupContent) {
+    popupContent += feature.properties.popupContent;
+  }
+
+  layer.bindPopup(popupContent);
+
+  //layer.on()
+
+  layer.on({
+    mouseover: function (e) {
+      e.target.setStyle({ 
+        Color: "#fff",
+        opacity: 0.9, 
+        weight: 3,
+      });
+      e.target.openPopup();
+      info.update(layer.feature.properties);I
+    },
+    mouseout: (e) => {
+      nat_polygons.resetStyle(e.target);
+      infra_polygons.resetStyle(e.target);
+      cultural_polygons.resetStyle(e.target);
+      e.target.closePopup();
+      info.update();
+    },
+  });
+}
+
 // style function for focal resources polys
 function style_feature_frpolys(feature) {
   return {
       fillColor: false,
-      weight: 1,
-      opacity: 0.5,
+      weight: 0.7,
+      opacity: 1,
       color: 'black',
       fillOpacity: 0,
 
   };
 }
+
+
 
 // script for circle markers
 var geojsonMarkerOptions = {
@@ -125,22 +170,42 @@ var baseMaps = {
 //     }
 //   });
 
-//category pionts
+// control that shows state info on hover
+const info = L.control();
+
+info.onAdd = function (map) {
+  this._div = L.DomUtil.create('div', 'info');
+  this.update();
+  return this._div;
+};
+
+info.update = function (props) {
+  //const contents = props ? `<b>${props.Island}</b><br />${props.Descriptio}` : 'Hover over a Focal Resource';
+  const contents = props ? `<b>${props.Descriptio}</b>` : 'Hover over a Focal Resource';
+  this._div.innerHTML = `<h4>Focal Resource Info</h4>${contents}`;
+};
+
+info.addTo(map);
+
+
+//category points
 var fr_points = L.geoJson(fr_points, {
   pointToLayer: function (feature, latlng) {
       return L.circleMarker(latlng, geojsonMarkerOptions);
   }
 }).addTo(map);
 
+
 //category polygons
-var nat_polygons = L.geoJson(nat_polys, {style: style_feature_frpolys,})
-//.addTo(map);
+var nat_polygons = L.geoJson(nat_polys, {style: style_feature_frpolys, onEachFeature: onEachFeaturePoly,})
+.addTo(map);
 
-var infra_polygons = L.geoJson(infra_polys, {style: style_feature_frpolys,})
-//.addTo(map);
 
-var cultural_polygons = L.geoJson(cultural_polys, {style: style_feature_frpolys,})
-//.addTo(map);
+var infra_polygons = L.geoJson(infra_polys, {style: style_feature_frpolys, onEachFeature: onEachFeaturePoly,})
+.addTo(map);
+
+var cultural_polygons = L.geoJson(cultural_polys, {style: style_feature_frpolys, onEachFeature: onEachFeaturePoly,})
+.addTo(map);
 
 // Polygons (Geojson)
 // Creating variable & style for Coastal Exposure 2030
@@ -194,14 +259,14 @@ var Boundary = L.geoJSON(null, {
 
 
 // Layers
+var Boundary_9Islands = L.layerGroup([Boundary]);
+var centroid_points = L.layerGroup([fr_points]);
 var cultural_polygons_layer = L.layerGroup([cultural_polygons]);
 var nat_polygons_layer = L.layerGroup([nat_polygons]);
 var infra_polygons_layer = L.layerGroup({infra_polygons});
 var CE_2030_layer = L.layerGroup([CE_2030]);
 var CE_2050_layer = L.layerGroup([CE_2050]);
 var CE_2070_layer = L.layerGroup([CE_2070]);
-var Boundary_9Islands = L.layerGroup([Boundary]);
-var centroid_points = L.layerGroup([fr_points]);
 
 
 //Layer groups
@@ -262,6 +327,15 @@ legend.addTo(map);
 //file:///C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_Project/BOHA_SpatialDecisionSupportSystem/WebApp/geojson_files/BOHA_Boundary.geojson. 
 //(Reason: CORS request not http).
 
+// Fetch BOHA Boundary
+fetch("geojson_files/BOHA_Boundary.geojson")
+.then((response) => {
+  return response.json();
+})
+.then((data) => {
+  console.log(data);
+  Boundary.addData(data);
+  });
 
 // Fetch geojson file for CE 2030
 fetch("./geojson_files/SLR1_MCE_RiskOutputs_poly.geojson")
@@ -381,17 +455,8 @@ fetch("./geojson_files/SLR3_MCE_RiskOutputs_poly.geojson")
   CE_2070.addData(data);
 });
 
-// Fetch BOHA Boundary
-fetch("public/BOHA_Boundary.geojson")
-.then((response) => {
-  return response.json();
-})
-.then((data) => {
-  console.log(data);
-  Boundary.addData(data);
-  });
 
 
-//risk layer again
+
 
 //STOP

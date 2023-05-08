@@ -170,6 +170,7 @@
     <script src="./js_datafiles/cultural_polys.js"></script>
     <script src="./js_datafiles/infra_polys.js"></script>
     <script src="./js_datafiles/nat_polys.js"></script>
+    <script src="./js_datafiles/centroid_focalresources.js"></script>
 
     <!-- leaflet -->
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
@@ -251,18 +252,18 @@
                 var zoom = map.getBoundsZoom(latlng.layer.getBounds());
                 map.setView(latlng, zoom); // access the zoom
             },
-        filterData: function (text, records) {
-              var jsons = fuse.search(text),
-                  ret = {}, key;
+        // filterData: function (text, records) {
+        //       var jsons = fuse.search(text),
+        //           ret = {}, key;
 
-              for (var i in jsons) {
-                  key = jsons[i].properties.NAME;
-                  ret[key] = records[key];
-              }
+        //       for (var i in jsons) {
+        //           key = jsons[i].properties.NAME;
+        //           ret[key] = records[key];
+        //       }
 
-              console.log(jsons, ret);
-              return ret;
-            }
+        //       console.log(jsons, ret);
+        //       return ret;
+        //     }
         });
       map.addControl(controlSearch);
 
