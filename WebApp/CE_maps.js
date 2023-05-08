@@ -36,11 +36,23 @@ function onEachFeatureFn(feature, layer) {
   });
 }
 
+// style function for focal resources polys
+function style_feature_frpolys(feature) {
+  return {
+      fillColor: false,
+      weight: 1,
+      opacity: 0.5,
+      color: 'black',
+      fillOpacity: 0,
+
+  };
+}
+
 // script for circle markers
 var geojsonMarkerOptions = {
   radius: 3,
-  fillColor: "#blue",
-  color: "#blue",
+  // fillColor: "#blue",
+  // color: "#blue",
   weight: 1,
   opacity: .7,
   fillOpacity: 0.4,
@@ -113,6 +125,23 @@ var baseMaps = {
 //     }
 //   });
 
+//category pionts
+var fr_points = L.geoJson(fr_points, {
+  pointToLayer: function (feature, latlng) {
+      return L.circleMarker(latlng, geojsonMarkerOptions);
+  }
+}).addTo(map);
+
+//category polygons
+var nat_polygons = L.geoJson(nat_polys, {style: style_feature_frpolys,})
+//.addTo(map);
+
+var infra_polygons = L.geoJson(infra_polys, {style: style_feature_frpolys,})
+//.addTo(map);
+
+var cultural_polygons = L.geoJson(cultural_polys, {style: style_feature_frpolys,})
+//.addTo(map);
+
 // Polygons (Geojson)
 // Creating variable & style for Coastal Exposure 2030
 var CE_2030 = L.geoJSON(null, {
@@ -163,13 +192,17 @@ var Boundary = L.geoJSON(null, {
 }).addTo(map);
 
 
+
 // Layers
+var cultural_polygons_layer = L.layerGroup([cultural_polygons]);
+var nat_polygons_layer = L.layerGroup([nat_polygons]);
+var infra_polygons_layer = L.layerGroup({infra_polygons});
 var CE_2030_layer = L.layerGroup([CE_2030]);
 var CE_2050_layer = L.layerGroup([CE_2050]);
 var CE_2070_layer = L.layerGroup([CE_2070]);
 var Boundary_9Islands = L.layerGroup([Boundary]);
-//var marker_points = L.layerGroup([all_points])
-var Boundary_search = L.layerGroup([Boundary]);
+var centroid_points = L.layerGroup([fr_points]);
+
 
 //Layer groups
 var overlayMaps = {
@@ -178,8 +211,12 @@ var overlayMaps = {
     "Coastal Exposure 2050" : CE_2050_layer,
     "Coastal Exposure 2070" : CE_2070_layer,
     "9 Islands Boundary" : Boundary_9Islands,
-    //"Cultural & Infrastructure/Facilities" : focalresource_points,
+    "Centroid Focal Resource Points" : centroid_points,
+    "Cultural Resources Polygons" : cultural_polygons_layer,
+    "Natural Resources Polygons" : nat_polygons_layer,
+    "Infrastructure/Facilties Polygons" : infra_polygons_layer,
 };
+
 
 //Layer box for all layer groups
 var layerControl = L.control

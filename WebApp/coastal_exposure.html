@@ -132,7 +132,7 @@
       <!-- container for click-able SLR -->
       <!-- <main role = "main" class = "col-md-9 ml-sm-auto col-lg-10 px-4"> -->
       <!-- <div class="card text-center"> -->
-        <div class="card_body">
+        <!-- <div class="card_body">
           <ul class="nav nav-tabs card-header-tabs">
 
             <li class="nav-item">
@@ -152,10 +152,7 @@
             </li>
 
           </ul>
-        </div>
-          <!-- </div>
-        </div>
-      </div>   -->
+        </div> -->
     </main>
 
 
@@ -168,6 +165,11 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+
+    <!-- js data files -->
+    <script src="./js_datafiles/cultural_polys.js"></script>
+    <script src="./js_datafiles/infra_polys.js"></script>
+    <script src="./js_datafiles/nat_polys.js"></script>
 
     <!-- leaflet -->
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
@@ -220,45 +222,65 @@
     <!-- Script for search bar -->
     <script>
 
-      var data = [
-          {"loc":[42.329958, -70.928567], "title":"Lovells"},
-          {"loc":[42.317916, -71.007576], "title":"Thompson"},
-          {"loc":[42.322815, -70.964917], "title":"Long"},
-          {"loc":[42.326117, -70.939321], "title":"Gallops"},
-          {"loc":[42.297402, -70.933620], "title":"Peddocks"},
-          {"loc":[42.319979, -70.928245], "title":"Georges"},
-          {"loc":[42.328001, -70.890660], "title":"Little Brewster"},	
-          {"loc":[42.332776, -70.896353], "title":"Great Brewster"},
-          {"loc":[42.341347, -70.895927], "title":"Calf"},
-      ]
+      // var data = [
+      //     {"loc":[42.329958, -70.928567], "title":"Lovells"},
+      //     {"loc":[42.317916, -71.007576], "title":"Thompson"},
+      //     {"loc":[42.322815, -70.964917], "title":"Long"},
+      //     {"loc":[42.326117, -70.939321], "title":"Gallops"},
+      //     {"loc":[42.297402, -70.933620], "title":"Peddocks"},
+      //     {"loc":[42.319979, -70.928245], "title":"Georges"},
+      //     {"loc":[42.328001, -70.890660], "title":"Little Brewster"},	
+      //     {"loc":[42.332776, -70.896353], "title":"Great Brewster"},
+      //     {"loc":[42.341347, -70.895927], "title":"Calf"},
+      // ]
       
-      // layer contains searched elements
-      var markersLayer = new L.LayerGroup();
+      // // layer contains searched elements
+      // var markersLayer = new L.LayerGroup();
 	
 	    //map.addLayer(markersLayer);
 
       var controlSearch = new L.Control.Search({
 		    position:'topleft',		
-		    layer: markersLayer,
+		    layer: Boundary,
+        propertyName: 'Island',
         initial: false,
         zoom: 15,
-        marker: false
-      });
+        marker: false,
+        moveToLocation: function (latlng, title, map) {
+                //map.fitBounds( latlng.layer.getBounds() );
+                var zoom = map.getBoundsZoom(latlng.layer.getBounds());
+                map.setView(latlng, zoom); // access the zoom
+            },
+        filterData: function (text, records) {
+              var jsons = fuse.search(text),
+                  ret = {}, key;
+
+              for (var i in jsons) {
+                  key = jsons[i].properties.NAME;
+                  ret[key] = records[key];
+              }
+
+              console.log(jsons, ret);
+              return ret;
+            }
+        });
       map.addControl(controlSearch);
 
+      
+
       //populate map with markers from sample data
-      for(i in data) {
-        var title = data[i].title,	//value searched
-          loc = data[i].loc,		//position found
-          marker = new L.circleMarker(new L.latLng(loc), 
-          {
-            color: false,
-            fillOpacity: 0,
-          }
-           );//se property searched
-        marker.bindPopup('Island: '+ title );
-        markersLayer.addLayer(marker);
-      }
+      // for(i in data) {
+      //   var title = data[i].title,	//value searched
+      //     loc = data[i].loc,		//position found
+      //     marker = new L.circleMarker(new L.latLng(loc), 
+      //     {
+      //       color: false,
+      //       fillOpacity: 0,
+      //     }
+      //      );//se property searched
+      //   marker.bindPopup('Island: '+ title );
+      //   markersLayer.addLayer(marker);
+      // }
 
     </script>
 
