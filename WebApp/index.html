@@ -22,134 +22,105 @@
 
 </head>
   <body>
-
-    <!-- Creating a navbar -->
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="index.html">Boston Harbor Islands: Focal Risk Analysis</a>
-        <ul class="navbar-nav px-3">
-        </ul>
-    </nav>
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="index.html">Boston Harbor Islands: Focal Risk Analysis</a>
+  </nav>
 
-    <!-- side bar container -->
-    <div class="container">
-        <div class="row">
-            <!-- sidebar -->
-            <div class="col-md-2 bg-light d-none d-md-block sidebar">
-                <div class="left-sidebar">
-
-                    <ul class="nav flex-column sidebar-nav data-bs-theme=dark">
-
-                        <!-- side bar tabs -->
-                        <li class="nav-item">
-                          <a class="nav-link active" href="Introduction.html">
-                            <svg class="bi bi-chevron-right" width="16" height="16" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6.646 3.646a.5.5 0 01.708 0l6 6a.5.5 0 010 .708l-6 6a.5.5 0 01-.708-.708L12.293 10 6.646 4.354a.5.5 0 010-.708z" clip-rule="evenodd"/></svg>
-                            Background
-                          </a>
-                        </li>
-
-                        <li class="nav-item">
-                          <a class="nav-link active" href="A4.html">
-                            <svg class="bi bi-chevron-right" width="16" height="16" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6.646 3.646a.5.5 0 01.708 0l6 6a.5.5 0 010 .708l-6 6a.5.5 0 01-.708-.708L12.293 10 6.646 4.354a.5.5 0 010-.708z" clip-rule="evenodd"/></svg>
-                            SLR Scenerios
-                          </a>
-                        </li>
-
-                        <li class="nav-item">
-                          <a class="nav-link active" href="coastal_exposure.html">
-                            <svg class="bi bi-chevron-right" width="16" height="16" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6.646 3.646a.5.5 0 01.708 0l6 6a.5.5 0 010 .708l-6 6a.5.5 0 01-.708-.708L12.293 10 6.646 4.354a.5.5 0 010-.708z" clip-rule="evenodd"/></svg>
-                            Coastal Exposure Analysis
-                          </a>
-                        </li>
-
-                        <li class="nav-item">
-                          <a class="nav-link active" href="#">
-                            <svg class="bi bi-chevron-right" width="16" height="16" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6.646 3.646a.5.5 0 01.708 0l6 6a.5.5 0 010 .708l-6 6a.5.5 0 01-.708-.708L12.293 10 6.646 4.354a.5.5 0 010-.708z" clip-rule="evenodd"/></svg>
-                            Focal Resources Exposure Assessment
-                          </a>
-                        </li>
-
-                        <li class = "nav-item">
-                          <a class="nav-link active" href="#">
-                            <svg class="bi bi-chevron-right" width="16" height="16" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6.646 3.646a.5.5 0 01.708 0l6 6a.5.5 0 010 .708l-6 6a.5.5 0 01-.708-.708L12.293 10 6.646 4.354a.5.5 0 010-.708z" clip-rule="evenodd"/></svg>
-                            Methods
-                          </a>
-                        </li>
-
-                        <li class = "nav-item">
-                          <a class="nav-link active" data-toggle="dropdown" href="#">
-                            <svg class="bi bi-chevron-right" width="16" height="16" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6.646 3.646a.5.5 0 01.708 0l6 6a.5.5 0 010 .708l-6 6a.5.5 0 01-.708-.708L12.293 10 6.646 4.354a.5.5 0 010-.708z" clip-rule="evenodd"/></svg>
-                            Data
-                            <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                              <li><a href="#">GeoSpatial Data</a></li>
-                              <li><a href="#">Scripts</a></li>
-                              <li><a href="Credits.html">Credits</a></li>
-                            </ul>
-                        </li>
-
-                        <li class = "nav-item">
-                          <a class="nav-link active" data-toggle="dropdown" href="#">
-                            <svg class="bi bi-chevron-right" width="16" height="16" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6.646 3.646a.5.5 0 01.708 0l6 6a.5.5 0 010 .708l-6 6a.5.5 0 01-.708-.708L12.293 10 6.646 4.354a.5.5 0 010-.708z" clip-rule="evenodd"/></svg>
-                            Islands
-                            <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                              <li><a href="#">Thomspon</a></li>
-                              <li><a href="#">Lovells</a></li>
-                              <li><a href="#">Georges</a></li>
-                              <li><a href="#">Long</a></li>
-                              <li><a href="#">Peddocks</a></li>
-                              <li><a href="#">Gallops</a></li>
-                              <li><a href="#">Little Brewster</a></li>
-                              <li><a href="#">Great Brewster</a></li>
-                              <li><a href="#">Calf</a></li>
-                            </ul>
-                        </li>
-
-                    </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-      </div>
-
-
-    <!-- Map -->
-    <main role = "main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-      <h3 id = 'SLR1_titleid'>Sea Level Rise Scenarios</h3>
-        <hr>
-          <div id='map' style='width: 80vw; height: 70vh; color:black'>
-          </div>
-    </main>
+  <main role = "main">
+    <h3 id = 'SLR1_titleid'> Sea Level Rise Scenarios </h3>
+        <!-- <hr> -->
     
-    <!-- container for click-able SLR -->
-    <main role = "main" class = "col-md-9 ml-sm-auto col-lg-10 px-4">
-      <!-- <div class="card text-center"> -->
-        <div class="card_body">
-          <ul class="nav nav-tabs card-header-tabs">
-
+    
+    <!-- Map container -->
+    <!-- <div class = "container"> -->
+      <div class = "row">
+        <!-- <div id='map' style='width: 85vw; height: 72vh; color:black'>
+        </div> -->
+    <!-- New side bar container -->
+      <div class = "col-sm-auto">
+        <div class="col-sm-auto bg-light sticky-top"></div>
+            <div class="d-flex flex-sm-column flex-row flex-nowrap flex-shrink-0 bg-light" style="width: 1rem;">
+              <!-- <a href="/" class="d-block p-3 link-dark text-decoration-none" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Icon-only"> -->
+                <!-- <svg class="bi" width="40" height="32"><use xlink:href="#bootstrap"></use></svg> -->
+                <span class="visually-hidden">Icon-only</span>
+          </a>
+          <!-- <ul class="nav nav-pills nav-flush flex-sm-column flex-row flex-nowrap mb-auto mx-auto text-center align-items-center"> -->
+          <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
             <li class="nav-item">
-              <a class="nav-link disabled" href="index.html"> Sea Level Rise Scenerios </a>
+              <a href="background.html" class="nav-link py-3 border-bottom" title="Background" data-bs-toggle="tooltip">
+                <img src=".\images\icons8-home-24.png" alt="home_button" class="rounded-circle" width="24" height="24">
+                <!-- <svg class="bi" width="24" height="24" role="png" aria-label="Background"><use xlink:href=".\images\icons8-home-24.png"></use></svg> -->
+              </a>
             </li>
-
-            <li class="nav-item">
-              <a class="nav-link" href="index.html"> 2030 </a>
+            <li>
+              <a href="index.html" class="nav-link py-3 border-bottom" title="SLR Scenarios" data-bs-toggle="tooltip">
+                <img src=".\images\icons8-rainwater-catchment-24.png" alt="home_button" class="rounded-circle" width="24" height="24">
+                <!-- <svg class="bi" width="24" height="24" role="img" aria-label="Sea Level Rise Scenarios"><use xlink:href="index.html"></use></svg> -->
+              </a>
             </li>
-
-            <li class="nav-item">
-              <a class="nav-link" href="map_SLR2.html"> 2050 </a>
-
-            <li class="nav-item">
-              <a class="nav-link" href="map_SLR3.html"> 2070 </a>
-
+            <li>
+              <a href="coastal_exposure.html" class="nav-link py-3 border-bottom" title="Coastal Exposure" data-bs-toggle="tooltip">
+                <!-- <svg class="bi" width="24" height="24" role="img" aria-label="Coastal Exposure"><use xlink:href="coastal_exposure.html"></use></svg> -->
+                <img src=".\images\icons8-america-24.png" alt="home_button" class="rounded-circle" width="24" height="24">
+              </a>
             </li>
-
+            <!-- <li>
+              <a href="FRRA.html" class="nav-link py-3 border-bottom" title="Focal Resource Risk Analysis" data-bs-toggle="tooltip">
+                <img src=".\images\icons8-map-pinpoint-24.png" alt="home_button" class="rounded-circle" width="24" height="24">
+              </a>
+            </li>
+            <li>
+              <a href="methods.html" class="nav-link py-3 border-bottom" title="Data/Methods" data-bs-toggle="tooltip">
+                <img src=".\images\icons8-download.gif" alt="home_button" class="rounded-circle" width="24" height="24">
+              </a>
+            </li> -->
           </ul>
-        </div>
+          
+          <div class="dropdown">
+            <a href="#" class="d-flex align-items-center p-3 link-dark text-decoration-none dropdown-toggle" id="dropdownUser3" data-bs-toggle="dropdown" aria-expanded="true">
+                <img src="https://github.com/amycarrillo164.png" alt="amycarrillo164" class="rounded-circle" width="24" height="24">
+            </a>
+            <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser3" data-popper-placement="top-start" style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate3d(0px, -58.4px, 0px);">
+                <li><a class="dropdown-item" href="https://github.com/amycarrillo164/BOHA_SpatialDecisionSupportSystem">Github</a></li>
+            </ul>
+          </div>
         </div>
       </div>
-    </div>  
 
+      <!-- map container -->
+      <div class = "col">  
+        <div id='map' style='width: 89vw; height: 72vh; color:black'>
+        </div>
+      </div>
+    </div>
+  <!-- </main> -->
 
+  <!-- container for click-able SLR -->
+  <!-- <div class = "col-md-9 ml-sm-auto col-lg-10 px-4">
+    <div class="card text-center">
+      <div class="card_body">
+        <ul class="nav nav-tabs card-header-tabs">
+
+          <li class="nav-item">
+            <a class="nav-link disabled" href="index.html"> <h>SLR Scenerios</h> </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="index.html"> 2030 </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="map_SLR2.html"> 2050 </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="map_SLR3.html"> 2070 </a>
+
+          </li>
+
+        </ul>
+      </div>
+    </div> -->
+  </main>
 
     <!-- Optional JavaScript -->
     <!-- Load jquery and PapaParse to read data from a CSV file -->

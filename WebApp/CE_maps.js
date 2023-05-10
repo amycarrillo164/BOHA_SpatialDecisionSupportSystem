@@ -252,8 +252,8 @@ var Boundary = L.geoJSON(null, {
 
 
 // Layers
-var Boundary_9Islands = L.layerGroup([Boundary]);
 var centroid_points = L.layerGroup([fr_points]);
+var Boundary_9Islands = L.layerGroup([Boundary]);
 var cultural_polygons_layer = L.layerGroup([cultural_polygons]);
 var nat_polygons_layer = L.layerGroup([nat_polygons]);
 var infra_polygons_layer = L.layerGroup({infra_polygons});
