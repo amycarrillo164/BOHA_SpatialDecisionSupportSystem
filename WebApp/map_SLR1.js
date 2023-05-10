@@ -1,3 +1,41 @@
+// Function for Island Boundary
+function onEachFeatureFn(feature, layer) {
+  var popupContent =
+    //"<p> Island: " +
+    feature.properties.Island;
+    //feature.geometry.type;
+    //  +
+    // "</br> Island: " +
+    // feature.properties.Island;
+    // "</br> Name: " +
+    // feature.properties.NAME +
+    // "</p>";
+
+  if (feature.properties && feature.properties.popupContent) {
+    popupContent += feature.properties.popupContent;
+  }
+
+  layer.bindPopup(popupContent);
+
+  //layer.on()
+
+  layer.on({
+    mouseover: function (e) {
+      e.target.setStyle({ 
+        Color: "#fff",
+        fillColor: false,
+        fillOpacity: 0,
+        opacity: 0.9, 
+        weight: 3,
+      });
+      e.target.openPopup();
+    },
+    mouseout: (e) => {
+      Boundary.resetStyle(e.target);
+      e.target.closePopup();
+    },
+  });
+}
 
 // Set up initial map
 var map = L.map('map', {
@@ -129,6 +167,11 @@ $.get('geojson_files/cultural_points.csv', function(csvString) {
 
 var SLR2030_1 = L.geoJSON(SLR2030_1CFEP, {style: style_feature_SLR1,}) .addTo(map);
 var SLR2030_10 = L.geoJSON(SLR2030_10CFEP, {style: style_feature_SLR10,}) .addTo(map);
+var c2050_1CFEP = L.geoJSON(null, {style: style_feature_SLR1,});
+var c2050_10CFEP = L.geoJSON(null, {style: style_feature_SLR10,}); 
+var c2070_1CFEP = L.geoJSON(null, {style: style_feature_SLR1,}); 
+var c2070_10CFEP = L.geoJSON(null, {style: style_feature_SLR10,}); 
+
 
 // // Style for SLR 2030 1% AEP
 // var SLR2030_1 = L.geoJSON([SLR2030_1CFEP], {
@@ -172,10 +215,15 @@ var Boundary = L.geoJSON(null, {
   onEachFeature: onEachFeatureFn,
 }).addTo(map);
 
+
 //Layers
+var Boundary_9Islands = L.layerGroup([Boundary]);
 var SLR2030_10_CFEP = L.layerGroup([SLR2030_10]);
 var SLR2030_1_CFEP = L.layerGroup([SLR2030_1]);
-var Boundary_9Islands = L.layerGroup([Boundary]);
+var SLR2050_10_CFEP = L.layerGroup([c2050_10CFEP]);
+var SLR2050_1_CFEP = L.layerGroup([c2050_1CFEP]);
+var SLR2070_10_CFEP = L.layerGroup([c2070_10CFEP]);
+var SLR2070_1_CFEP = L.layerGroup([c2070_1CFEP]);
 //var marker_points = L.layerGroup([marker])
 
 
@@ -184,6 +232,10 @@ var overlayMaps = {
    //"cultural points" : data,
     "SLR 2030 + 10% AEP" : SLR2030_10_CFEP,
     "SLR 2030 + 1% AEP" : SLR2030_1_CFEP,
+    "SLR 2050 + 10% AEP" : SLR2050_10_CFEP,
+    "SLR 2050 + 1% AEP" : SLR2050_1_CFEP,
+    "SLR 2070 + 10% AEP" : SLR2070_10_CFEP,
+    "SLR 2070 + 1% AEP" : SLR2070_1_CFEP,
     "9 Islands Boundary" : Boundary_9Islands,
     //"Cultural & Infrastructure/Facilities" : marker_points,
 };
@@ -239,6 +291,55 @@ fetch("./geojson_files/BOHA_Boundary.geojson")
 .then((data) => {
   console.log(data);
   Boundary.addData(data);
+  });
+
+// Fetch 2050
+fetch("./geojson_files/BOHA_Boundary.geojson")
+.then((response) => {
+  return response.json();
+})
+.then((data) => {
+  console.log(data);
+  Boundary.addData(data);
+  });
+
+
+fetch("./geojson_files/c2050_1CFEPpoly.geojson")
+.then((response) => {
+  return response.json();
+})
+.then((data) => {
+  console.log(data);
+  c2050_1CFEP.addData(data);
+  });
+
+fetch("./geojson_files/c2050_10CFEPpoly.geojson")
+.then((response) => {
+  return response.json();
+})
+.then((data) => {
+  console.log(data);
+  c2050_10CFEP.addData(data);
+  });
+
+
+// Fetch 2070
+fetch("./geojson_files/c2070_1CFEPpoly.geojson")
+.then((response) => {
+  return response.json();
+})
+.then((data) => {
+  console.log(data);
+  c2070_1CFEP.addData(data);
+  });
+
+fetch("./geojson_files/c2070_1CFEPpoly.geojson")
+.then((response) => {
+  return response.json();
+})
+.then((data) => {
+  console.log(data);
+  c2070_10CFEP.addData(data);
   });
 
 

@@ -32,7 +32,7 @@ html {
   }
   
 
-  .container {
+  .info-container {
     max-width: 1240px;
   }
 
@@ -56,7 +56,16 @@ html {
     padding-left: 120px;
   }
 
-  
+  #datasources_titleid {
+    color: #222222;
+    padding-top: 20px;
+    padding-left: 70px;    
+  }
+
+  #data_table{
+    padding-left: 15px;
+  }
+
   /* .form-control-primary {
       margin: 10px;
       opacity: 0.2;

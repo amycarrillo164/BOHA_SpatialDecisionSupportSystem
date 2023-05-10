@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Required meta tages -->
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <!-- <link rel="stylesheet" href="writing.css" > -->
+        <link rel="stylesheet" href="css/dashboard.css" >
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+        
+        <title>Data Sources</title>
+
+
+    </head>
+    <body>
+        <!-- Creating a navbar -->
+        <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+            <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="index.html">Boston Harbor Islands: Focal Risk Analysis</a>
+        </nav>
+
+    <!-- Main stage container -->
+
+        <!-- Title -->
+        <main role = "main">
+            <h3 id = 'datasources_titleid'>Data Sources</h3>
+            <!-- <hr> -->
+        
+        <!-- Container for sidebar -->
+        <div class = "row">
+            <!-- New side bar container -->
+            <div class = "col-sm-auto">
+                <div class="col-sm-auto bg-light sticky-top"></div>
+                    <div class="d-flex flex-sm-column flex-row flex-nowrap flex-shrink-0 bg-light" style="width: 1rem;">
+                    <!-- <a href="/" class="d-block p-3 link-dark text-decoration-none" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Icon-only"> -->
+                        <!-- <svg class="bi" width="40" height="32"><use xlink:href="#bootstrap"></use></svg> -->
+                        <span class="visually-hidden">Icon-only</span>
+                </a>
+                <!-- <ul class="nav nav-pills nav-flush flex-sm-column flex-row flex-nowrap mb-auto mx-auto text-center align-items-center"> -->
+                <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
+                    <li class="nav-item">
+                        <a href="background.html" class="nav-link py-3 border-bottom" title="Background" data-bs-toggle="tooltip">
+                            <img src=".\images\icons8-home-24.png" alt="home_button" class="rounded-circle" width="24" height="24">
+                            <!-- <svg class="bi" width="24" height="24" role="png" aria-label="Background"><use xlink:href=".\images\icons8-home-24.png"></use></svg> -->
+                        </a>
+                    </li>
+                    <li>
+                        <a href="index.html" class="nav-link py-3 border-bottom" title="SLR Scenarios" data-bs-toggle="tooltip">
+                            <img src=".\images\icons8-rainwater-catchment-24.png" alt="home_button" class="rounded-circle" width="24" height="24">
+                            <!-- <svg class="bi" width="24" height="24" role="img" aria-label="Sea Level Rise Scenarios"><use xlink:href="index.html"></use></svg> -->
+                        </a>
+                    </li>
+                    <li>
+                        <a href="coastal_exposure.html" class="nav-link py-3 border-bottom" title="Coastal Exposure" data-bs-toggle="tooltip">
+                            <!-- <svg class="bi" width="24" height="24" role="img" aria-label="Coastal Exposure"><use xlink:href="coastal_exposure.html"></use></svg> -->
+                            <img src=".\images\icons8-america-24.png" alt="home_button" class="rounded-circle" width="24" height="24">
+                        </a>
+                    </li>
+                    <!-- <li>
+                        <a href="FRRA.html" class="nav-link py-3 border-bottom" title="Focal Resource Risk Analysis" data-bs-toggle="tooltip">
+                            <img src=".\images\icons8-map-pinpoint-24.png" alt="home_button" class="rounded-circle" width="24" height="24">
+                        </a>
+                    </li> -->
+                    <li>
+                        <a href="data.html" class="nav-link py-3 border-bottom" title="Data/Methods" data-bs-toggle="tooltip">
+                            <img src=".\images\icons8-download.gif" alt="home_button" class="rounded-circle" width="24" height="24">
+                        </a>
+                    </li> 
+                </ul>
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center p-3 link-dark text-decoration-none dropdown-toggle" id="dropdownUser3" data-bs-toggle="dropdown" aria-expanded="true">
+                        <img src="https://github.com/amycarrillo164.png" alt="amycarrillo164" class="rounded-circle" width="24" height="24">
+                    </a>
+                    <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser3" data-popper-placement="top-start" style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate3d(0px, -58.4px, 0px);">
+                        <li><a class="dropdown-item" href="https://github.com/amycarrillo164/BOHA_SpatialDecisionSupportSystem">Github</a></li>
+                    </ul>
+                </div>
+                </div>
+            </div>
+
+
+            <!-- Paragraph Information -->
+            <div class = "col">
+                <div id = 'data_table'>
+                    <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th scope="col">Theme</th>
+                            <th scope="col">Sub-theme</th>
+                            <th scope="col">Source</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Type of Geodata</th>
+                            <th scope="col">Availability</th>
+                            <th scope="col">Parameters</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th scope="row">Natural Resources</th>
+                            <td>Vegetation</td>
+                            <td>NPS: Vegetation Mapping Inventory Project of Boston Harbor Islands National Recreation Area</td>
+                            <td>2008</td>
+                            <td>Polygons</td>
+                            <td>Public</td>
+                            <td>*Salt marsh locations, sand dune system, native oak</td>
+                          </tr>
+                          <tr>
+                            <th scope="row"></th>
+                            <td>Endangered plant species</td>
+                            <td>NPS</td>
+                            <td>N/A</td>
+                            <td>Points</td>
+                            <td>Not public</td>
+                            <td>*Endangered plant species (Angelica lucida and seabeach doc)</td>
+                          </tr>
+                          <tr>
+                            <th scope="row"></th>
+                            <td>Bird habitat</td>
+                            <td>NPS, Massachusetts Audubon, Mass CZM</td>
+                            <td>N/A</td>
+                            <td>Points, Polygons</td>
+                            <td>Not public</td>
+                            <td>*American oystercatchers, common eiders, and other wading bird habitats</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">Cultural Resources</th>
+                            <td>Cultural locations</td>
+                            <td>Boston University/NPS</td>
+                            <td>N/A</td>
+                            <td>Points</td>
+                            <td>Not public</td>
+                            <td>*Cottages, historical graveyards, lighthouses, historical landmarks, etc.</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">Infrastructure/Facilties</th>
+                            <td>Points of interest</td>
+                            <td>Western Carolina University/ National Parks Service</td>
+                            <td>N/A</td>
+                            <td>Points</td>
+                            <td>Not public</td>
+                            <td>Paths, Roads, Trails, *Assets</td>
+                          </tr>
+                          <tr>
+                            <th scope="row"></th>
+                            <td>Building Structures (2-D)</td>
+                            <td>MassGIS</td>
+                            <td>N/A</td>
+                            <td>Polygons</td>
+                            <td>Public</td>
+                            <td>Turn cultural and infrastructure points into polygons.</td>
+                          </tr>
+                          <tr>
+                            <th scope="row"></th>
+                            <td>Infrastructure/Facilties (Focal Resources)</td>
+                            <td>Digitized (Amy Carrillo)</td>
+                            <td>N/A</td>
+                            <td>Polygons</td>
+                            <td>Not public</td>
+                            <td>Facilities not captured from MassGIS roof prints (docks/Piers, campgrounds, etc). Turn BU/NPS cultural and infrastructure points into polygons.</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">Storm Risk</th>
+                            <td>2030 Coastal Flood Exceedance Probabilities (MC-FRM) </td>
+                            <td>MA Executive Office of Energy and Environmental Affairs/MassCZM</td>
+                            <td>2022</td>
+                            <td>Raster</td>
+                            <td>Public</td>
+                            <td>10% AEP, 1% AEP</td>
+                          </tr>
+                          <tr>
+                            <th scope="row"></th>
+                            <td>2050 Coastal Flood Exceedance Probabilities (MC-FRM) </td>
+                            <td>MA Executive Office of Energy and Environmental Affairs/MassCZM</td>
+                            <td>2022</td>
+                            <td>Raster</td>
+                            <td>Public</td>
+                            <td>10% AEP, 1% AEP</td>
+                          </tr>
+                          <tr>
+                            <th scope="row"></th>
+                            <td>2070 Coastal Flood Exceedance Probabilities (MC-FRM) </td>
+                            <td>MA Executive Office of Energy and Environmental Affairs/MassCZM</td>
+                            <td>2022</td>
+                            <td>Raster</td>
+                            <td>Public</td>
+                            <td>10% AEP, 1% AEP</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">Erosion Risk</th>
+                            <td>Land Cover</td>
+                            <td>MassGIS Data: 2016 Land Cover/Land Use</td>
+                            <td>2016</td>
+                            <td>Polygons</td>
+                            <td>Public</td>
+                            <td>"Determine an area's stability levels by looking at unvegetated land cover."</td>
+                          </tr>
+                          <tr>
+                            <th scope="row"></th>
+                            <td>Retreating Bluffs</td>
+                            <td>Boston University (Department of Earth & Environment)</td>
+                            <td>N/A</td>
+                            <td>Line</td>
+                            <td>Not public</td>
+                            <td>Bluff retreat zones</td>
+                          </tr>
+                          <tr>
+                            <th scope="row"></th>
+                            <td>Shoreline Type</td>
+                            <td>Boston University (Department of Earth & Environment)</td>
+                            <td>N/A</td>
+                            <td>Line</td>
+                            <td>Not public</td>
+                            <td>Sandy shorelines are the most erodible shorelines.</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">Flood Risk</th>
+                            <td>Digital Elevation Model (DEM)</td>
+                            <td>MassGIS Data: Lidar DEM and Shaded Relief. 2021 USGS Lidar Central eastern Massachusetts</td>                            </td>
+                            <td>2021</td>
+                            <td>Raster</td>
+                            <td>Public</td>
+                            <td>Low elevation areas can be flooded or submerged depending on the sea level rise scenario.</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">Boundary</th>
+                            <td>9 Islands Boundary</td>
+                            <td>Digitized (Amy Carrillo)</td>
+                            <td>N/A</td>
+                            <td>Polygon</td>
+                            <td>Not public</td>
+                            <td>Used for clipping.</td>
+                          </tr>
+                        </tbody>
+                      </table> 
+                </div>    
+            </div>       
+    </main>        
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+    
+    </body>
+</html>
