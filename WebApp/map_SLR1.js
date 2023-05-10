@@ -174,37 +174,6 @@ var c2070_1CFEP = L.geoJSON(null, {style: style_feature_SLR1,});
 var c2070_10CFEP = L.geoJSON(null, {style: style_feature_SLR10,}); 
 
 
-// // Style for SLR 2030 1% AEP
-// var SLR2030_1 = L.geoJSON([SLR2030_1CFEP], {
-//   style: (feature) => {
-//     return { 
-//       fillColor: '#003E78', //'#5fbaff' 
-//       weight: 2,
-//       opacity: 1,
-//       //color: 'white',
-//       dashArray: '3',
-//       fillOpacity: 1,
-//       //color: "#000", fill: "#ccc", fillOpacity: 0.2 
-//     };
-//   },
-//   //onEachFeature: onEachFeatureFn,
-// }).addTo(map);
-
-// // Style for SLR 2030 10% AEP
-// var SLR2030_10 = L.geoJSON([SLR2030_10CFEP], {
-//   style: (feature) => {
-//     return { 
-//       fillColor: "#005EB8",
-//       weight: 2,
-//       opacity: 0.9,
-//       //color: 'white',
-//       //dashArray: '3',
-//       fillOpacity: 1,
-//     };
-//   },
-//   //onEachFeature: onEachFeatureFn,
-// }).addTo(map);
-
 // Style for boundary
 var Boundary = L.geoJSON(null, {
   style: (feature) => {
