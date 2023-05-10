@@ -165,15 +165,6 @@ function onEachFeatureFn(feature, layer) {
 //     }
 //   });
 
-var marker = L.geoJSON(null, {}); 
-var SLR2030_1 = L.geoJSON(SLR2030_1CFEP, {style: style_feature_SLR1,}) .addTo(map);
-var SLR2030_10 = L.geoJSON(SLR2030_10CFEP, {style: style_feature_SLR10,}) .addTo(map);
-var c2050_1CFEP = L.geoJSON(null, {style: style_feature_SLR1,});
-var c2050_10CFEP = L.geoJSON(null, {style: style_feature_SLR10,}); 
-var c2070_1CFEP = L.geoJSON(null, {style: style_feature_SLR1,}); 
-var c2070_10CFEP = L.geoJSON(null, {style: style_feature_SLR10,}); 
-
-
 // Style for boundary
 var Boundary = L.geoJSON(null, {
   style: (feature) => {
@@ -186,6 +177,14 @@ var Boundary = L.geoJSON(null, {
   },
   onEachFeature: onEachFeatureFn,
 }).addTo(map);
+
+var marker = L.geoJSON(null, {}); 
+var SLR2030_1 = L.geoJSON(SLR2030_1CFEP, {style: style_feature_SLR1,}) .addTo(map);
+var SLR2030_10 = L.geoJSON(SLR2030_10CFEP, {style: style_feature_SLR10,}) .addTo(map);
+var c2050_1CFEP = L.geoJSON(null, {style: style_feature_SLR1,});
+var c2050_10CFEP = L.geoJSON(null, {style: style_feature_SLR10,}); 
+var c2070_1CFEP = L.geoJSON(null, {style: style_feature_SLR1,}); 
+var c2070_10CFEP = L.geoJSON(null, {style: style_feature_SLR10,}); 
 
 
 //Layers
