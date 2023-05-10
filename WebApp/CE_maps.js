@@ -265,14 +265,14 @@ var CE_2070_layer = L.layerGroup([CE_2070]);
 //Layer groups
 var overlayMaps = {
    //"cultural points" : data,
+    "Centroid Focal Resource Points" : centroid_points,
     "Coastal Exposure 2030" : CE_2030_layer,
     "Coastal Exposure 2050" : CE_2050_layer,
     "Coastal Exposure 2070" : CE_2070_layer,
-    "9 Islands Boundary" : Boundary_9Islands,
-    "Centroid Focal Resource Points" : centroid_points,
     "Cultural Resources Polygons" : cultural_polygons_layer,
     "Natural Resources Polygons" : nat_polygons_layer,
     "Infrastructure/Facilties Polygons" : infra_polygons_layer,
+    "9 Islands Boundary" : Boundary_9Islands,
 };
 
 

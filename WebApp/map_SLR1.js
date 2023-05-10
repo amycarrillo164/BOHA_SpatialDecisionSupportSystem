@@ -136,35 +136,36 @@ function onEachFeatureFn(feature, layer) {
   });
 }
 
-//POINTS (CVS)
-// Read markers data from data.csv
-$.get('geojson_files/cultural_points.csv', function(csvString) {
-  // Use PapaParse to convert string to array of objects
-  var data = Papa.parse(csvString, {header: true, dynamicTyping: true}).data;
-  // For each row in data, create a marker and add it to the map
-  // For each row, columns `Latitude`, `Longitude`, and `Title` are required
-  for (var i in data) {
-    var row = data[i];
-    var marker = L.circleMarker([row.Latitude, row.Longitude], {
-      radius: 3,
-      fillColor: '#fff',
-      color: '#fff',
-      weight: 0.1,
-      opacity: 1,
-      fillOpacity: 0.6,
-      pane: 'markerPane',
-      // }).bindTooltip(feature.properties.NAME)
+// //POINTS (CVS)
+// // Read markers data from data.csv
+// $.get('geojson_files/cultural_points.csv', function(csvString) {
+//   // Use PapaParse to convert string to array of objects
+//   var data = Papa.parse(csvString, {header: true, dynamicTyping: true}).data;
+//   // For each row in data, create a marker and add it to the map
+//   // For each row, columns `Latitude`, `Longitude`, and `Title` are required
+//   for (var i in data) {
+//     var row = data[i];
+//     var marker = L.circleMarker([row.Latitude, row.Longitude], {
+//       radius: 3,
+//       fillColor: '#fff',
+//       color: '#fff',
+//       weight: 0.1,
+//       opacity: 1,
+//       fillOpacity: 0.6,
+//       pane: 'markerPane',
+//       // }).bindTooltip(feature.properties.NAME)
   
-    //customize your icon
-    // icon: L.icon({
-    //   iconUrl: "https://img.icons8.com/plasticine/100/null/map-pin.png",
-    //   iconSize: [12, 10]
-    // })
-    }).bindPopup(row.Island);    
-    marker.addTo(map);
-    }
-  });
+//     //customize your icon
+//     // icon: L.icon({
+//     //   iconUrl: "https://img.icons8.com/plasticine/100/null/map-pin.png",
+//     //   iconSize: [12, 10]
+//     // })
+//     }).bindPopup(row.Island);    
+//     marker.addTo(map);
+//     }
+//   });
 
+var marker = L.geoJSON(null, {}); 
 var SLR2030_1 = L.geoJSON(SLR2030_1CFEP, {style: style_feature_SLR1,}) .addTo(map);
 var SLR2030_10 = L.geoJSON(SLR2030_10CFEP, {style: style_feature_SLR10,}) .addTo(map);
 var c2050_1CFEP = L.geoJSON(null, {style: style_feature_SLR1,});
@@ -209,6 +210,8 @@ var Boundary = L.geoJSON(null, {
   style: (feature) => {
     return { 
       color: "#fff",
+      fillColor: false,
+      fillOpacity: 0,
       weight: 1,
     };
   },
@@ -224,7 +227,7 @@ var SLR2050_10_CFEP = L.layerGroup([c2050_10CFEP]);
 var SLR2050_1_CFEP = L.layerGroup([c2050_1CFEP]);
 var SLR2070_10_CFEP = L.layerGroup([c2070_10CFEP]);
 var SLR2070_1_CFEP = L.layerGroup([c2070_1CFEP]);
-//var marker_points = L.layerGroup([marker])
+var marker_points = L.layerGroup([marker]);
 
 
 //Layer groups
@@ -237,7 +240,7 @@ var overlayMaps = {
     "SLR 2070 + 10% AEP" : SLR2070_10_CFEP,
     "SLR 2070 + 1% AEP" : SLR2070_1_CFEP,
     "9 Islands Boundary" : Boundary_9Islands,
-    //"Cultural & Infrastructure/Facilities" : marker_points,
+    "Cultural & Infrastructure/Facilities" : marker_points,
 };
 
 //Layer box for all layer groups
@@ -283,7 +286,31 @@ var lcDIVElem = layerControl.getContainer();
 //     SLR2030_10.addData(data);
 //     });
 
-// Fetch BOHA Boundary
+// Legend
+var legend = L.control({ position: "bottomleft" });
+
+legend.onAdd = function(map) {
+  var div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h4>Annual Exceedence <br>Probabilties</h4>";
+  div.innerHTML += '<i style="background: #005EB8"></i><span>10% AEP</span><br>';
+  div.innerHTML += '<i style="background: #003E78"></i><span>1% AEP</span><br>';
+  return div;
+};
+
+legend.addTo(map);
+
+
+// Fetch markers
+// fetch("./geojson_files/centroid_focalresources.geojson")
+// .then((response) => {
+//   return response.json();
+// })
+// .then((data) => {
+//   console.log(data);
+//   markers.addData(data);
+//   });
+
+// Fetch boundary
 fetch("./geojson_files/BOHA_Boundary.geojson")
 .then((response) => {
   return response.json();
@@ -294,16 +321,6 @@ fetch("./geojson_files/BOHA_Boundary.geojson")
   });
 
 // Fetch 2050
-fetch("./geojson_files/BOHA_Boundary.geojson")
-.then((response) => {
-  return response.json();
-})
-.then((data) => {
-  console.log(data);
-  Boundary.addData(data);
-  });
-
-
 fetch("./geojson_files/c2050_1CFEPpoly.geojson")
 .then((response) => {
   return response.json();
@@ -333,7 +350,7 @@ fetch("./geojson_files/c2070_1CFEPpoly.geojson")
   c2070_1CFEP.addData(data);
   });
 
-fetch("./geojson_files/c2070_1CFEPpoly.geojson")
+fetch("./geojson_files/c2070_10CFEPpoly.geojson")
 .then((response) => {
   return response.json();
 })
