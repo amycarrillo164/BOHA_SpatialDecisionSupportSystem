@@ -288,6 +288,7 @@ fetch("./geojson_files/BOHA_Boundary.geojson")
   Boundary.addData(data);
   });
 
+
 // Fetch 2050
 fetch("./geojson_files/c2050_1CFEPpoly.geojson")
 .then((response) => {
