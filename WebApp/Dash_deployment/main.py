@@ -28,6 +28,7 @@ data = pd.read_csv("Dash_intro/data/practice_fr_data.csv")
 # ]
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SIMPLEX])
+server = app.server
 
 app.layout = dbc.Container([
     dbc.Row([
