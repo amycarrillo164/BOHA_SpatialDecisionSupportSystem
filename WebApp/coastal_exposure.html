@@ -22,8 +22,11 @@
 
     <!-- <link rel="stylesheet" type="text/css" href="css/leaflet-search.css" /> -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.8.0/dist/geosearch.css" />
-
     
+    <!-- data table -->
+    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+
     <title>Coastal Exposure</title>
 
 </head>
@@ -70,11 +73,11 @@
                 <img src=".\images\icons8-america-24.png" alt="home_button" class="rounded-circle" width="24" height="24">
               </a>
             </li>
-            <!-- <li>
-              <a href="FRRA.html" class="nav-link py-3 border-bottom" title="Focal Resource Risk Analysis" data-bs-toggle="tooltip">
+            <li>
+              <a href="pythonapp.html" class="nav-link py-3 border-bottom" title="Focal Resource Risk Analysis" data-bs-toggle="tooltip">
                 <img src=".\images\icons8-map-pinpoint-24.png" alt="home_button" class="rounded-circle" width="24" height="24">
               </a>
-            </li> -->
+            </li> 
             <li>
               <a href="data.html" class="nav-link py-3 border-bottom" title="Data/Methods" data-bs-toggle="tooltip">
                 <img src=".\images\icons8-download.gif" alt="home_button" class="rounded-circle" width="24" height="24">
@@ -106,6 +109,8 @@
        <p>Thompson, Lovells, Peddocks, Georges, Gallops, Long, Little Brewster, Great Brewster, and Calf </p>
     </div>
 
+    <div id="example-table"></div>
+
   </main>
 
     <!-- Optional JavaScript -->
@@ -123,7 +128,8 @@
     <script src="./js_datafiles/cultural_polys.js"></script>
     <script src="./js_datafiles/infra_polys.js"></script>
     <script src="./js_datafiles/nat_polys.js"></script>
-
+    <!-- js data files > data table -->
+    <script src = "js_datafiles/table_data.js"></script>
 
     <!-- leaflet -->
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
@@ -139,13 +145,11 @@
     <script src="https://unpkg.com/leaflet-geosearch@3.8.0/dist/geosearch.umd.js"></script>
     <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
 
-
     <!-- WebGIS hw  -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.6.0/proj4.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/proj4leaflet/1.0.2/proj4leaflet.min.js"></script>
     <script type="text/javascript" src="https://edihasaj.github.io/leaflet-coord-projection/coord-projection.js"></script>
-
 
     <!-- find near points -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/1.2.2/fuse.min.js"></script>
@@ -155,13 +159,12 @@
     <script src="./js/leaflet-search.js"></script>
     <link href='./css/leaflet-search.css' rel='stylesheet' />
 
-    <!-- draw and select features -->
-    <script src="./lib/js/Leaflet.SelectAreaFeature.js"></script>
-    
     <!-- full screen control -->
     <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
     <link rel="stylesheet" href="./css/Control.FullScreen.css" />
     <script src="./js/Control.FullScreen.js"></script>
+
+
     
     <script>
     var fsControl = L.control.fullscreen();
@@ -182,24 +185,6 @@
 
     <!-- Script for search bar -->
     <script>
-
-      // var data = [
-      //     {"loc":[42.329958, -70.928567], "title":"Lovells"},
-      //     {"loc":[42.317916, -71.007576], "title":"Thompson"},
-      //     {"loc":[42.322815, -70.964917], "title":"Long"},
-      //     {"loc":[42.326117, -70.939321], "title":"Gallops"},
-      //     {"loc":[42.297402, -70.933620], "title":"Peddocks"},
-      //     {"loc":[42.319979, -70.928245], "title":"Georges"},
-      //     {"loc":[42.328001, -70.890660], "title":"Little Brewster"},	
-      //     {"loc":[42.332776, -70.896353], "title":"Great Brewster"},
-      //     {"loc":[42.341347, -70.895927], "title":"Calf"},
-      // ]
-      
-      // // layer contains searched elements
-      // var markersLayer = new L.LayerGroup();
-	
-	    //map.addLayer(markersLayer);
-
       var controlSearch = new L.Control.Search({
 		    position:'topleft',		
 		    layer: Boundary,
@@ -214,21 +199,6 @@
             },
         });
       map.addControl(controlSearch);
-
-
-      //populate map with markers from sample data
-      // for(i in data) {
-      //   var title = data[i].title,	//value searched
-      //     loc = data[i].loc,		//position found
-      //     marker = new L.circleMarker(new L.latLng(loc), 
-      //     {
-      //       color: false,
-      //       fillOpacity: 0,
-      //     }
-      //      );//se property searched
-      //   marker.bindPopup('Island: '+ title );
-      //   markersLayer.addLayer(marker);
-      // }
 
     </script>
 
@@ -247,6 +217,9 @@
         nearestResult.layer.bindPopup("I'm the nearest point!").openPopup();
       })      
     </script>
+
+
+
     
   </body>
 </html>

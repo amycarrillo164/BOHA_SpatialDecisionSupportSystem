@@ -1,5 +1,5 @@
 
-// Function for Island Boundary
+// Function for Island Boundary popup
 function onEachFeatureFn(feature, layer) {
   var popupContent =
     //"<p> Island: " +
@@ -18,8 +18,6 @@ function onEachFeatureFn(feature, layer) {
 
   layer.bindPopup(popupContent);
 
-  //layer.on()
-
   layer.on({
     mouseover: function (e) {
       e.target.setStyle({ 
@@ -37,8 +35,7 @@ function onEachFeatureFn(feature, layer) {
 }
 
 
-//Function for polygons
-
+//Function for polygons popup
 function onEachFeaturePoly(feature, layer) {
   var popupContent =
   "<p> Focal Resource </p>"
@@ -56,8 +53,6 @@ function onEachFeaturePoly(feature, layer) {
   }
 
   layer.bindPopup(popupContent);
-
-  //layer.on()
 
   layer.on({
     mouseover: function (e) {
@@ -90,6 +85,27 @@ function style_feature_frpolys(feature) {
 
   };
 }
+
+// function to update the data table with the location annd text of each marker
+function updateDataTable (map) {
+	let dataTableBody = $('#data-table tbody')
+  dataTableBody.html('<tr></tr>')
+  map.eachLayer(layer => {
+    let popup = layer.getPopup()
+    if (popup) {
+      let text = $(popup.getContent()).find('.popup-span').text()
+      let latLng = layer.getLatLng()
+      dataTableBody.append(
+        $('<tr></tr>').append(
+          $('<td></td>').text(latLng.lat),
+          $('<td></td>').text(latLng.lng),
+          $('<td></td>').text(text),
+         )
+      )
+    }
+  })
+}
+
 
 
 // script for circle markers
@@ -450,8 +466,13 @@ fetch("./geojson_files/SLR3_MCE_RiskOutputs_poly.geojson")
   CE_2070.addData(data);
 });
 
-
-
-
+var table = new Tabulator("#example-table", {
+  data:tabledata,
+  autoColumns:true,
+  movableColumns:true,
+  resizableRows:true,
+  layout:"fitColumns",
+  height:"311px",
+});
 
 //STOP
