@@ -1,4 +1,5 @@
 import pandas as pd
+import geopandas as gpd
 import plotly
 import plotly.express as px
 
@@ -15,7 +16,10 @@ mapbox_access_token = "pk.eyJ1IjoiYW15Y2FycmlsbG8xNjQiLCJhIjoiY2xndmRoc2VjMHA3MT
 # px.set_mapbox_access_token(open("pk.eyJ1IjoiYW15Y2FycmlsbG8xNjQiLCJhIjoiY2xndmRoc2VjMHA3MTNqa2xpendiamd2eCJ9.Upsr89rAajlIImTICVikzQ").read())
 
 #use your data!!!
-data = pd.read_csv("Dash_intro/data/practice_fr_data.csv")
+data = pd.read_csv("Dash_intro/data/FR_Centroids_MCE2_latlong.csv")
+
+MCE_df = gpd.read_file("Dash_intro/data/FR_Merge_Polys_MCE2.geojson")
+
 
 # options = [
 #     {'NR','CR', 'INFRA'},
@@ -27,15 +31,15 @@ data = pd.read_csv("Dash_intro/data/practice_fr_data.csv")
 #     {'CR','INFRA'},
 # ]
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SIMPLEX])
-server = app.server
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+# server = app.server
 
 app.layout = dbc.Container([
-    dbc.Row([
-        dbc.Col([
-            html.H1("Focal Resources Site Selection ", style={'textAlign':'center'})
-        ], width=12)
-    ]),
+    # dbc.Row([
+    #     dbc.Col([
+    #         html.H1("Focal Resources Site Selection ", style={'textAlign':'center'})
+    #     ], width=12)
+    # ]),
 
     # html.Div([    
     #     html.Div([
@@ -71,7 +75,7 @@ app.layout = dbc.Container([
         #          max = 2070, min = 2030, step = 20, required = True),
         #dcc.Input(id = 'input_FocalResource', type = 'text', value = ('NR','CR', 'INFRA'),
         #          required=True),
-        dcc.Dropdown(id = 'dropdown_FR', options = ['NR','CR', 'INFRA'], multi=True),
+        dcc.Dropdown(id = 'dropdown_FR', options = ['Natural Resources','Cultural Resources', 'Infrastructure/Facilties'], multi=True),
         html.Button(id='submit_button', n_clicks = 0, children = 'Submit'),
         html.Div(id = 'output_state')
     ],style = {'text-align': 'center'}),
@@ -97,15 +101,22 @@ def update_output(num_clicks, val_selected2):
         df = data.query("Category=={}".format(val_selected2))
         
         fig = px.scatter_mapbox(df,
-                                lat="Latitude",
-                                lon="Longitude",
+                                lat="latitude",
+                                lon="longitude",
+                                # color = "Category",
                                 color = "gridcode_2030",
                                 hover_name="Descriptio",
                                 #hover_data = "Island",
-                                color_continuous_scale = px.colors.cyclical.IceFire,
+                                color_continuous_scale = px.colors.sequential.Bluered,
                                 zoom = 5,
                                 size_max= 30)
-                                
+
+
+        # fig = {
+        #     "data" : [
+        #         scatter_data,
+        #         chloropeth_data
+        #     ]}                    
 
         fig.update_layout(
             mapbox_style="white-bg",
@@ -122,7 +133,7 @@ def update_output(num_clicks, val_selected2):
 
         fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
         #fig.update_layout(mapbox_bounds={"west": -71.028897, "east": -70.831599, "south": 42.285887, "north": 42.348372})
-        fig.update_layout(mapbox_bounds={"west": -71.2, "east": -70.5, "south": 42.25, "north": 42.4})
+        fig.update_layout(mapbox_bounds={"west": -71.035, "east": -70.83, "south": 42.28, "north": 42.36})
         
         # fig.update_layout(title=dict(font=dict(size=28), x=0.5, xanchor = 'center'),
                         #   margin=dict(l=60, r=60, t=50, b=50))
@@ -130,6 +141,14 @@ def update_output(num_clicks, val_selected2):
         return('The input SLR Scenario was ... Focal resource(s) selected is/are "{}". The button has been clicked {} times.'.format (val_selected2, num_clicks), fig)
         # return((val_selected2, num_clicks), fig)
 
+# fig = px.choropleth_mapbox(MCE_df,
+#                             geojson= MCE_df, 
+#                             color="gridcode",
+#                             locations="Id", 
+#                             # featureidkey="properties.gridcode",
+#                             # center={"lat": 45.5517, "lon": -73.7073},
+#                             # mapbox_style="carto-positron", zoom=9
+#                             )
 
 if __name__ == '__main__':
     app.run_server(debug = True)

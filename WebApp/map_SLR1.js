@@ -49,6 +49,9 @@ var map = L.map('map', {
     // position: "topleft",
     // },
 });
+map.createPane('boundary_pane')
+map.getPane('boundary_pane').style.zIndex = 650;
+map.getPane('boundary_pane').style.pointerEvents = 'none';
 
 
 // display Carto basemap tiles with light features and labels
@@ -136,34 +139,6 @@ function onEachFeatureFn(feature, layer) {
   });
 }
 
-// //POINTS (CVS)
-// // Read markers data from data.csv
-// $.get('geojson_files/cultural_points.csv', function(csvString) {
-//   // Use PapaParse to convert string to array of objects
-//   var data = Papa.parse(csvString, {header: true, dynamicTyping: true}).data;
-//   // For each row in data, create a marker and add it to the map
-//   // For each row, columns `Latitude`, `Longitude`, and `Title` are required
-//   for (var i in data) {
-//     var row = data[i];
-//     var marker = L.circleMarker([row.Latitude, row.Longitude], {
-//       radius: 3,
-//       fillColor: '#fff',
-//       color: '#fff',
-//       weight: 0.1,
-//       opacity: 1,
-//       fillOpacity: 0.6,
-//       pane: 'markerPane',
-//       // }).bindTooltip(feature.properties.NAME)
-  
-//     //customize your icon
-//     // icon: L.icon({
-//     //   iconUrl: "https://img.icons8.com/plasticine/100/null/map-pin.png",
-//     //   iconSize: [12, 10]
-//     // })
-//     }).bindPopup(row.Island);    
-//     marker.addTo(map);
-//     }
-//   });
 
 // Style for boundary
 var Boundary = L.geoJSON(null, {
@@ -176,11 +151,12 @@ var Boundary = L.geoJSON(null, {
     };
   },
   onEachFeature: onEachFeatureFn,
+  pane:'boundary_pane'
 }).addTo(map);
 
 var marker = L.geoJSON(null, {}); 
-var SLR2030_1 = L.geoJSON(SLR2030_1CFEP, {style: style_feature_SLR1,}) .addTo(map);
-var SLR2030_10 = L.geoJSON(SLR2030_10CFEP, {style: style_feature_SLR10,}) .addTo(map);
+var c2030_1CFEP = L.geoJSON(null, {style: style_feature_SLR1,}).addTo(map);
+var c2030_10CFEP = L.geoJSON(null, {style: style_feature_SLR10,}).addTo(map);
 var c2050_1CFEP = L.geoJSON(null, {style: style_feature_SLR1,});
 var c2050_10CFEP = L.geoJSON(null, {style: style_feature_SLR10,}); 
 var c2070_1CFEP = L.geoJSON(null, {style: style_feature_SLR1,}); 
@@ -189,8 +165,8 @@ var c2070_10CFEP = L.geoJSON(null, {style: style_feature_SLR10,});
 
 //Layers
 var Boundary_9Islands = L.layerGroup([Boundary]);
-var SLR2030_10_CFEP = L.layerGroup([SLR2030_10]);
-var SLR2030_1_CFEP = L.layerGroup([SLR2030_1]);
+var SLR2030_10_CFEP = L.layerGroup([c2030_10CFEP]);
+var SLR2030_1_CFEP = L.layerGroup([c2030_1CFEP]);
 var SLR2050_10_CFEP = L.layerGroup([c2050_10CFEP]);
 var SLR2050_1_CFEP = L.layerGroup([c2050_1CFEP]);
 var SLR2070_10_CFEP = L.layerGroup([c2070_10CFEP]);
@@ -232,27 +208,6 @@ var lcDIVElem = layerControl.getContainer();
         }
       });
 
-// // FETCHING DATA
-
-// // Fetch geojson file for SLR 2030 1% AEP
-// fetch("./geojson_files/c2030_1CFEPpoly.json")
-// .then((response) => {
-//   return response.json();
-// })
-// .then((data) => {
-//   console.log(data);
-//   SLR2030_1.addData(data);
-//   });
-
-// // Fetch geojson file for SLR 2030 10% AEP
-//   fetch("./geojson_files/c2030_10CFEPpoly.geojson")
-//   .then((response) => {
-//     return response.json();
-//   })
-//   .then((data) => {
-//     console.log(data);
-//     SLR2030_10.addData(data);
-//     });
 
 // Legend
 var legend = L.control({ position: "bottomleft" });
@@ -267,6 +222,8 @@ legend.onAdd = function(map) {
 
 legend.addTo(map);
 
+
+// FETCHING THE DATA
 
 // Fetch markers
 // fetch("./geojson_files/centroid_focalresources.geojson")
@@ -288,6 +245,25 @@ fetch("./geojson_files/BOHA_Boundary.geojson")
   Boundary.addData(data);
   });
 
+
+// Fetch 2030
+fetch("./geojson_files/c2030_1CFEPpoly.geojson")
+.then((response) => {
+  return response.json();
+})
+.then((data) => {
+  console.log(data);
+  c2030_1CFEP.addData(data);
+  });
+
+fetch("./geojson_files/c2030_10CFEPpoly.geojson")
+.then((response) => {
+  return response.json();
+})
+.then((data) => {
+  console.log(data);
+  c2030_10CFEP.addData(data);
+  });
 
 // Fetch 2050
 fetch("./geojson_files/c2050_1CFEPpoly.geojson")

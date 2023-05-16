@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "leaflet-knn": "^0.1.0"
+    "leaflet-knn": "^0.1.0",
+    "tabulator-tables": "^5.4.4"
   }
 }

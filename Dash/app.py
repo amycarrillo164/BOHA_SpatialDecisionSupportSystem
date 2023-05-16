@@ -49,9 +49,10 @@ df3 = pd.read_csv(
     dtype=object,
 )
 df = pd.concat([df1, df2, df3], axis=0)
-df["Date/Time"] = pd.to_datetime(df["Date/Time"], format="%Y-%m-%d %H:%M")
+df["Date/Time"] = pd.to_datetime(df["Date/Time"])
 df.index = df["Date/Time"]
-df.drop("Date/Time", 1, inplace=True)
+df.drop("Date/Time", axis = 1, inplace=True)
+
 totalList = []
 for month in df.groupby(df.index.month):
     dailyList = []
@@ -150,7 +151,7 @@ app.layout = html.Div(
                                 "Select any of the bars on the histogram to section data by time."
                             ],
                         ),
-                        dcc.Graph(id="histogram"),
+                        #dcc.Graph(id="histogram"),
                     ],
                 ),
             ],
@@ -160,68 +161,71 @@ app.layout = html.Div(
 
 # Gets the amount of days in the specified month
 # Index represents month (0 is April, 1 is May, ... etc.)
+
 daysInMonth = [30, 31, 30, 31, 31, 30]
 
 # Get index for the specified month in the dataframe
+
 monthIndex = pd.Index(["Apr", "May", "June", "July", "Aug", "Sept"])
 
-def get_selection(month, day, selection):
-    xVal = []
-    yVal = []
-    xSelected = []
-    colorVal = [
-        "#F4EC15",
-        "#DAF017",
-        "#BBEC19",
-        "#9DE81B",
-        "#80E41D",
-        "#66E01F",
-        "#4CDC20",
-        "#34D822",
-        "#24D249",
-        "#25D042",
-        "#26CC58",
-        "#28C86D",
-        "#29C481",
-        "#2AC093",
-        "#2BBCA4",
-        "#2BB5B8",
-        "#2C99B4",
-        "#2D7EB0",
-        "#2D65AC",
-        "#2E4EA4",
-        "#2E38A4",
-        "#3B2FA0",
-        "#4E2F9C",
-        "#603099",
-    ]
+# def get_selection(month, day, selection):
+#     xVal = []
+#     yVal = []
+#     xSelected = []
+#     colorVal = [
+#         "#F4EC15",
+#         "#DAF017",
+#         "#BBEC19",
+#         "#9DE81B",
+#         "#80E41D",
+#         "#66E01F",
+#         "#4CDC20",
+#         "#34D822",
+#         "#24D249",
+#         "#25D042",
+#         "#26CC58",
+#         "#28C86D",
+#         "#29C481",
+#         "#2AC093",
+#         "#2BBCA4",
+#         "#2BB5B8",
+#         "#2C99B4",
+#         "#2D7EB0",
+#         "#2D65AC",
+#         "#2E4EA4",
+#         "#2E38A4",
+#         "#3B2FA0",
+#         "#4E2F9C",
+#         "#603099",
+#     ]
 
-    # Put selected times into a list of numbers xSelected
-    xSelected.extend([int(x) for x in selection])
+#     # Put selected times into a list of numbers xSelected
+#     xSelected.extend([int(x) for x in selection])
 
-    for i in range(24):
-        # If bar is selected then color it white
-        if i in xSelected and len(xSelected) < 24:
-            colorVal[i] = "#FFFFFF"
-        xVal.append(i)
-        # Get the number of rides at a particular time
-        yVal.append(len(totalList[month][day][totalList[month][day].index.hour == i]))
-    return [np.array(xVal), np.array(yVal), np.array(colorVal)]
+#     for i in range(24):
+#         # If bar is selected then color it white
+#         if i in xSelected and len(xSelected) < 24:
+#             colorVal[i] = "#FFFFFF"
+#         xVal.append(i)
+#         # Get the number of rides at a particular time
+#         yVal.append(len(totalList[month][day][totalList[month][day].index.hour == i]))
+#     return [np.array(xVal), np.array(yVal), np.array(colorVal)]
 
 
 # Selected Data in the Histogram updates the Values in the Hours selection dropdown menu
-@app.callback(
-    Output("bar-selector", "value"),
-    [Input("histogram", "selectedData"), Input("histogram", "clickData")],
-)
-def update_bar_selector(value, clickData):
-    holder = []
-    if clickData:
-        holder.append(str(int(clickData["points"][0]["x"])))
-    if value:
-        for x in value["points"]:
-            holder.append(str(int(x["x"])))
-    return list(set(holder))
+
+# @app.callback(
+#     Output("bar-selector", "value"),
+#     [Input("histogram", "selectedData"), Input("histogram", "clickData")],
+# )
+# def update_bar_selector(value, clickData):
+#     holder = []
+#     if clickData:
+#         holder.append(str(int(clickData["points"][0]["x"])))
+#     if value:
+#         for x in value["points"]:
+#             holder.append(str(int(x["x"])))
+#     return list(set(holder))
 
 
 # Clear Selected Data if Click Data is used
@@ -244,114 +248,114 @@ def update_total_rides(datePicked):
 @app.callback(
     [Output("total-rides-selection", "children"), Output("date-value", "children")],
     [Input("date-picker", "date"), Input("bar-selector", "value")],
-)
-def update_total_rides_selection(datePicked, selection):
-    firstOutput = ""
+ )
+# def update_total_rides_selection(datePicked, selection):
+#     firstOutput = ""
 
-    if selection != None or len(selection) != 0:
-        date_picked = dt.strptime(datePicked, "%Y-%m-%d")
-        totalInSelection = 0
-        for x in selection:
-            totalInSelection += len(
-                totalList[date_picked.month - 4][date_picked.day - 1][
-                    totalList[date_picked.month - 4][date_picked.day - 1].index.hour
-                    == int(x)
-                ]
-            )
-        firstOutput = "Total rides in selection: {:,d}".format(totalInSelection)
+#     if selection != None or len(selection) != 0:
+#         date_picked = dt.strptime(datePicked, "%Y-%m-%d")
+#         totalInSelection = 0
+#         for x in selection:
+#             totalInSelection += len(
+#                 totalList[date_picked.month - 4][date_picked.day - 1][
+#                     totalList[date_picked.month - 4][date_picked.day - 1].index.hour
+#                     == int(x)
+#                 ]
+#             )
+#         firstOutput = "Total rides in selection: {:,d}".format(totalInSelection)
 
-    if (
-        datePicked == None
-        or selection == None
-        or len(selection) == 24
-        or len(selection) == 0
-    ):
-        return firstOutput, (datePicked, " - showing hour(s): All")
+#     if (
+#         datePicked == None
+#         or selection == None
+#         or len(selection) == 24
+#         or len(selection) == 0
+#     ):
+#         return firstOutput, (datePicked, " - showing hour(s): All")
 
-    holder = sorted([int(x) for x in selection])
+#     holder = sorted([int(x) for x in selection])
 
-    if holder == list(range(min(holder), max(holder) + 1)):
-        return (
-            firstOutput,
-            (
-                datePicked,
-                " - showing hour(s): ",
-                holder[0],
-                "-",
-                holder[len(holder) - 1],
-            ),
-        )
+#     if holder == list(range(min(holder), max(holder) + 1)):
+#         return (
+#             firstOutput,
+#             (
+#                 datePicked,
+#                 " - showing hour(s): ",
+#                 holder[0],
+#                 "-",
+#                 holder[len(holder) - 1],
+#             ),
+#         )
 
-    holder_to_string = ", ".join(str(x) for x in holder)
-    return firstOutput, (datePicked, " - showing hour(s): ", holder_to_string)
+#     holder_to_string = ", ".join(str(x) for x in holder)
+#     return firstOutput, (datePicked, " - showing hour(s): ", holder_to_string)
 
 
-# Update Histogram Figure based on Month, Day and Times Chosen
-@app.callback(
-    Output("histogram", "figure"),
-    [Input("date-picker", "date"), Input("bar-selector", "value")],
-)
-def update_histogram(datePicked, selection):
-    date_picked = dt.strptime(datePicked, "%Y-%m-%d")
-    monthPicked = date_picked.month - 4
-    dayPicked = date_picked.day - 1
+# # Update Histogram Figure based on Month, Day and Times Chosen
+# @app.callback(
+#     Output("histogram", "figure"),
+#     [Input("date-picker", "date"), Input("bar-selector", "value")],
+# )
+# def update_histogram(datePicked, selection):
+#     date_picked = dt.strptime(datePicked, "%Y-%m-%d")
+#     monthPicked = date_picked.month - 4
+#     dayPicked = date_picked.day - 1
 
-    [xVal, yVal, colorVal] = get_selection(monthPicked, dayPicked, selection)
+#     [xVal, yVal, colorVal] = get_selection(monthPicked, dayPicked, selection)
 
-    layout = go.Layout(
-        bargap=0.01,
-        bargroupgap=0,
-        barmode="group",
-        margin=go.layout.Margin(l=10, r=0, t=0, b=50),
-        showlegend=False,
-        plot_bgcolor="#323130",
-        paper_bgcolor="#323130",
-        dragmode="select",
-        font=dict(color="white"),
-        xaxis=dict(
-            range=[-0.5, 23.5],
-            showgrid=False,
-            nticks=25,
-            fixedrange=True,
-            ticksuffix=":00",
-        ),
-        yaxis=dict(
-            range=[0, max(yVal) + max(yVal) / 4],
-            showticklabels=False,
-            showgrid=False,
-            fixedrange=True,
-            rangemode="nonnegative",
-            zeroline=False,
-        ),
-        annotations=[
-            dict(
-                x=xi,
-                y=yi,
-                text=str(yi),
-                xanchor="center",
-                yanchor="bottom",
-                showarrow=False,
-                font=dict(color="white"),
-            )
-            for xi, yi in zip(xVal, yVal)
-        ],
-    )
+#     layout = go.Layout(
+#         bargap=0.01,
+#         bargroupgap=0,
+#         barmode="group",
+#         margin=go.layout.Margin(l=10, r=0, t=0, b=50),
+#         showlegend=False,
+#         plot_bgcolor="#323130",
+#         paper_bgcolor="#323130",
+#         dragmode="select",
+#         font=dict(color="white"),
+#         xaxis=dict(
+#             range=[-0.5, 23.5],
+#             showgrid=False,
+#             nticks=25,
+#             fixedrange=True,
+#             ticksuffix=":00",
+#         ),
+#         yaxis=dict(
+#             range=[0, max(yVal) + max(yVal) / 4],
+#             showticklabels=False,
+#             showgrid=False,
+#             fixedrange=True,
+#             rangemode="nonnegative",
+#             zeroline=False,
+#         ),
+#         annotations=[
+#             dict(
+#                 x=xi,
+#                 y=yi,
+#                 text=str(yi),
+#                 xanchor="center",
+#                 yanchor="bottom",
+#                 showarrow=False,
+#                 font=dict(color="white"),
+#             )
+#             for xi, yi in zip(xVal, yVal)
+#         ],
+#     )
 
-    return go.Figure(
-        data=[
-            go.Bar(x=xVal, y=yVal, marker=dict(color=colorVal), hoverinfo="x"),
-            go.Scatter(
-                opacity=0,
-                x=xVal,
-                y=yVal / 2,
-                hoverinfo="none",
-                mode="markers",
-                marker=dict(color="rgb(66, 134, 244, 0)", symbol="square", size=40),
-                visible=True,
-            ),
-        ],
-        layout=layout,
-    )
+#     return go.Figure(
+#         data=[
+#             go.Bar(x=xVal, y=yVal, marker=dict(color=colorVal), hoverinfo="x"),
+#             go.Scatter(
+#                 opacity=0,
+#                 x=xVal,
+#                 y=yVal / 2,
+#                 hoverinfo="none",
+#                 mode="markers",
+#                 marker=dict(color="rgb(66, 134, 244, 0)", symbol="square", size=40),
+#                 visible=True,
+#             ),
+#         ],
+#         layout=layout,
+#     )
 
 
 # Get the Coordinates of the chosen months, dates and times

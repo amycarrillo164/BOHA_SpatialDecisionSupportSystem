@@ -107,7 +107,6 @@ function updateDataTable (map) {
 }
 
 
-
 // script for circle markers
 var geojsonMarkerOptions = {
   radius: 3,
@@ -124,6 +123,9 @@ var map = L.map('map', {
     center: [42.3131628, -70.9297749], 
     zoom: 13,
 });
+map.createPane('fr_pane')
+map.getPane('fr_pane').style.zIndex = 650;
+map.getPane('fr_pane').style.pointerEvents = 'none';
 
 
 // display Carto basemap tiles with light features and labels
@@ -150,34 +152,6 @@ var baseMaps = {
 
 };
 
-// //Points (CVS)
-// // Read markers data from data.csv
-// $.get('geojson_files/cultural_points.csv', function(csvString) {
-//   // Use PapaParse to convert string to array of objects
-//   var data = Papa.parse(csvString, {header: true, dynamicTyping: true}).data;
-//   // For each row in data, create a marker and add it to the map
-//   // For each row, columns `Latitude`, `Longitude`, and `Title` are required
-//   for (var i in data) {
-//     var row = data[i];
-//     var marker = L.circleMarker([row.Latitude, row.Longitude], {
-//       radius: 3,
-//       fillColor: '#0d6efd',
-//       color: '#0d6efd',
-//       weight: 0.1,
-//       opacity: 1,
-//       fillOpacity: 0.5,
-//       pane: 'markerPane',
-//       // }).bindTooltip(feature.properties.NAME)
-  
-//     //customize your icon
-//     // icon: L.icon({
-//     //   iconUrl: "https://img.icons8.com/plasticine/100/null/map-pin.png",
-//     //   iconSize: [12, 10]
-//     // })
-//     }).bindPopup(row.Category);    
-//     marker.addTo(map);
-//     }
-//   });
 
 // control that shows state info on hover
 const info = L.control();
@@ -193,18 +167,10 @@ info.update = function (props) {
   const contents = props ? `<b>${props.Descriptio}</b>` : '1. Turn on Polygon Layers <br> 2. Hover Over a Focal Resource';
   this._div.innerHTML = `<h4>Focal Resource Info</h4>${contents}`;
 };
-
 info.addTo(map);
 
 
-//category points
-var fr_points = L.geoJson(fr_points, {
-  pointToLayer: function (feature, latlng) {
-      return L.circleMarker(latlng, geojsonMarkerOptions);
-  }
-}).addTo(map);
-
-
+//Creating variables for data
 //category polygons
 var nat_polygons = L.geoJson(nat_polys, {style: style_feature_frpolys, onEachFeature: onEachFeaturePoly,})
 //.addTo(map);
@@ -217,6 +183,7 @@ var cultural_polygons = L.geoJson(cultural_polys, {style: style_feature_frpolys,
 //.addTo(map);
 
 // Polygons (Geojson)
+
 // Creating variable & style for Coastal Exposure 2030
 var CE_2030 = L.geoJSON(null, {
   style: (feature) => {
@@ -265,30 +232,42 @@ var Boundary = L.geoJSON(null, {
   onEachFeature: onEachFeatureFn,
 }).addTo(map);
 
+//Creating variable & style for centroid merge points
+var Centroid_FR_Merge = L.geoJson(null, {
+  pane: 'fr_pane',
+  pointToLayer: function (feature, latlng) {
+    return L.circleMarker(latlng, geojsonMarkerOptions);
+  },
+})
+.addTo(map);
 
+Centroid_FR_Merge.bringToFront();
 
 // Layers
-var centroid_points = L.layerGroup([fr_points]);
-var Boundary_9Islands = L.layerGroup([Boundary]);
+
 var cultural_polygons_layer = L.layerGroup([cultural_polygons]);
 var nat_polygons_layer = L.layerGroup([nat_polygons]);
 var infra_polygons_layer = L.layerGroup([infra_polygons]);
 var CE_2030_layer = L.layerGroup([CE_2030]);
 var CE_2050_layer = L.layerGroup([CE_2050]);
 var CE_2070_layer = L.layerGroup([CE_2070]);
+var centroid_points = L.layerGroup([fr_points]);
+var Boundary_9Islands = L.layerGroup([Boundary]);
 
 
 //Layer groups
 var overlayMaps = {
    //"cultural points" : data,
-    "Centroid Focal Resource Points" : centroid_points,
+
     "Coastal Exposure 2030" : CE_2030_layer,
     "Coastal Exposure 2050" : CE_2050_layer,
     "Coastal Exposure 2070" : CE_2070_layer,
     "Cultural Resources Polygons" : cultural_polygons_layer,
     "Natural Resources Polygons" : nat_polygons_layer,
     "Infrastructure/Facilties Polygons" : infra_polygons_layer,
+    "Centroid Focal Resource Points" : centroid_points,
     "9 Islands Boundary" : Boundary_9Islands,
+    
 };
 
 
@@ -333,9 +312,16 @@ legend.addTo(map);
 
 
 // FETCHING DATA
-// Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at 
-//file:///C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_Project/BOHA_SpatialDecisionSupportSystem/WebApp/geojson_files/BOHA_Boundary.geojson. 
-//(Reason: CORS request not http).
+
+// Fetch BOHA Boundary
+fetch("geojson_files/BOHA_Boundary.geojson")
+.then((response) => {
+  return response.json();
+})
+.then((data) => {
+  console.log(data);
+  Boundary.addData(data);
+  });
 
 // Fetch BOHA Boundary
 fetch("geojson_files/BOHA_Boundary.geojson")
@@ -466,8 +452,21 @@ fetch("./geojson_files/SLR3_MCE_RiskOutputs_poly.geojson")
   CE_2070.addData(data);
 });
 
+
+// Fetch centroid points
+fetch("geojson_files/Centroid_FR_Merge2.geojson")
+.then((response) => {
+  return response.json();
+})
+.then((data) => {
+  console.log(data);
+  Centroid_FR_Merge.addData(data);
+  });
+
+
+// Tabulator data table
 var table = new Tabulator("#example-table", {
-  data:tabledata,
+  data: tabledata,
   autoColumns:true,
   movableColumns:true,
   resizableRows:true,
