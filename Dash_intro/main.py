@@ -8,7 +8,7 @@ from dash import Dash, html, dcc
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 
-from dash.dependencies import Input, Output, State  
+from dash.dependencies import Input, Output, State, MATCH  
 from dash.exceptions import PreventUpdate
 
 
@@ -46,39 +46,40 @@ app.layout = dbc.Container([
 
     html.Div([
         dcc.Dropdown(id = 'dropdown_FR', options = ['Natural_Resources','Cultural_Resources', 'Infrastructure_Facilities'], multi=True, placeholder= "Focal Resource"),
-        dcc.Dropdown(id = 'dropdown_Priority', options = ['Low','Medium', 'High'], multi=True, placeholder="Priority Level"),
-        dcc.Input(id = 'input_Gridcode', type = 'number', inputMode = 'numeric', value = '4',
-                  max = 4, min = 1, step = 1, placeholder= "Coastal Exposure Grid Code"),
+        #dcc.Dropdown(id = 'dropdown_Priority', options = ['Low','Medium', 'High'], multi=True, placeholder="Priority Level"),
+        #dcc.Input(id = 'input_Gridcode', type = 'number', inputMode = 'numeric', value = '4',
+         #         max = 4, min = 1, step = 1, placeholder= "Coastal Exposure Grid Code"),
         html.Button(id='submit_button', n_clicks = 0, children = 'Submit'),
         html.Div(id = 'output_state')
-    ],style = {'text-align': 'center'}),
+    ], style = {'text-align': 'center'}),
 ])
 
 @app.callback(
     [Output('output_state','children'),
     Output(component_id = 'the_graph', component_property = 'figure')],
-    [Input(component_id = 'submit_button', component_property='n_clicks'),
-    Input(component_id = 'dropdown_Priority', component_property = 'value'),
-    Input(component_id = 'dropdown_FR', component_property = 'value')],
-    [State(component_id = 'input_Gridcode', component_property = 'value')],
+    [Input(component_id ='submit_button', component_property='n_clicks'),
+    #Input(component_id = 'dropdown_Priority', component_property = 'value'),
+    State(component_id = 'dropdown_FR', component_property = 'value')],
+    #[State(component_id = 'input_Gridcode', component_property = 'value')],
     prevent_initial_call = False,
 )
 
 
 #    if val_selected or val_selected2 is None:
-def update_output(num_clicks, val_selected2, val_selected3, val_selected4):
+def update_output(num_clicks, val_selected2):
     if val_selected2 is None:
         raise PreventUpdate
     else:
         #df = data.query("year=={}".format(val_selected))
+        #df = data[(data['Category'] == val_selected2) &
+        #           (data['Priority'] == val_selected3)]
+        #df = data.query("gridcode_2050=={}".format(val_selected4))
         df = data.query("Category=={}".format(val_selected2))
-        df = data.query("Priority=={}".format(val_selected3))
-        df = data.query("gridcode_2050=={}".format(val_selected4))
         
         fig = px.scatter_mapbox(df,
                                 lat="latitude",
                                 lon="longitude",
-                                #size = "Category",
+                                #size = "Priortiy",
                                 color = "gridcode_2050",
                                 hover_name="Descriptio",
                                #custom_data = "Category",
@@ -117,7 +118,7 @@ def update_output(num_clicks, val_selected2, val_selected3, val_selected4):
         fig.update_layout(mapbox_bounds={"west": -71.035, "east": -70.83, "south": 42.28, "north": 42.36})
         
         
-        return('SLR Scenario 2050. Focal resource(s) selected is/are "{}". Priority selected is/are "{}". Grid code number selected is "{}". The button has been clicked {} times.'.format (val_selected2, val_selected3, val_selected4, num_clicks), fig)
+        return('SLR Scenario 2050. Focal resource(s) selected is/are "{}". The button has been clicked {} times.'.format (val_selected2, num_clicks), fig)
         #return (num_clicks, val_selected2, val_selected3, val_selected4, fig)
 # fig = px.choropleth_mapbox(MCE_df,
 #                             geojson= MCE_df, 
