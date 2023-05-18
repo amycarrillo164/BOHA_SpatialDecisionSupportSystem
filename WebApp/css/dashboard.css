@@ -1,5 +1,5 @@
 html {
-    font-family: sans-serif;
+    font-family: 'Lato', sans-serif;
     line-height: 1.15;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -7,13 +7,16 @@ html {
 
   
   body {
-    --bs-body-font-family: var(--bs-font-monospace);
+    --bs-body-font-family: var(--bs-font-sans-serif);
     --bs-body-line-height: 1.4;
     --bs-body-bg: var(--bs-gray-100);
     /* margin: 0; */
     /* margin-left: 10px; */
   }
   
+  .nav {
+    align-self: center;
+  }
  
 
   main {
