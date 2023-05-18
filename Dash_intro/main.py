@@ -5,6 +5,8 @@ import plotly.express as px
 
 import dash
 from dash import Dash, html, dcc
+from dash import dash_table
+from dash.dash_table.Format import Group
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 
@@ -40,7 +42,7 @@ app.layout = dbc.Container([
     ),
 
     html.Div([    
-        # html.Div([
+        html.Div([
             dcc.Graph(id='the_graph')
         ]),
 
@@ -58,6 +60,33 @@ app.layout = dbc.Container([
         #    'CoastalExposure_2030', 'Coastal_Exposure2050', 'Coastal_Exposure2070']),
         html.Div(id = 'output_state')
     ], style = {'text-align': 'center'}),
+    ]),
+
+    html.Div([
+        dash_table.DataTable(
+        columns=[
+            {'name': 'Island', 'id': 'Island', 'type': 'text'},
+            {'name': 'Focal Resource', 'id': 'Category', 'type': 'text'},
+            {'name': 'Description', 'id': 'Descriptio', 'type': 'text'},
+            {'name': 'Priority', 'id': 'Priority', 'type': 'text'},
+            {'name': 'Coastal Exposure Risk 2030', 'id': 'CoastalExposure_2030', 'type': 'numeric'},
+            {'name': 'Coastal Exposure Risk 2050', 'id': 'CoastalExposure_2050', 'type': 'numeric'},
+            {'name': 'Coastal Exposure Risk 2070', 'id': 'CoastalExposure_2070', 'type': 'numeric'}
+        ],
+        data=data.to_dict('records'),
+        filter_action='native',
+
+        style_table={
+            'height': 200,
+        },
+        style_data={
+            'width': '150px', 'minWidth': '150px', 'maxWidth': '150px',
+            'overflow': 'hidden',
+            'textOverflow': 'ellipsis',
+            
+        }
+    )
+])
 ])
 
 @app.callback(
