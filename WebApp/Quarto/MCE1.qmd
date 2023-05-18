@@ -1,8 +1,8 @@
-# Multicritera Evaluation #1
+# Focal Resources Coastal Exposure Analysis
 
-## Data Clean-Up
+## Methodology
 
-### Methodology
+### Overview of steps:
 
 -   Turn cultural resources, natural resource, infrastructure/facilities into a mosaic raster.
 -   Re-scale the elevation measurements so the lowest elevation is 1 and the highest elevation is 0.
@@ -22,17 +22,17 @@ arcpy.env.workspace = "C:/BOHA_SpatialDecisionSupportSystem/Data"
 env.scratchWorkspace ="C:/BOHA_SpatialDecisionSupportSystem/Data/Raster_Scratch.gdb"
 ```
 
-### Data processing and clean-up for MCE #1 raster grid inputs
+### Data processing and clean-up for Coastal Exposure raster grid inputs
 
 -   **R1. Focal Resources Raster Mosaic.**
 
-    -   The "Focal_Resources_Polys_Merge" vector polygon layer contains the following:
+    -   [Focal Resources]{.smallcaps}
 
-        -   Input Group 1: Natural Resources (salt marshes, coastal bird habitats, coastal dunes, rare plant species,
+        -   *Input Group 1:* Natural Resources (salt marshes, coastal bird habitats, coastal dunes, rare plant species,
 
-        -   Input Group 2: Cultural Resources (National Historic Landmarks, Native American burial sites, etc.)
+        -   *Input Group 2*: Cultural Resources (National Historic Landmarks, Native American burial sites, etc.)
 
-        -   Input Group 3: Infrastructure/Facilties (piers, park facilities, cottages, shops, etc.)
+        -   *Input Group 3*: Infrastructure/Facilties (piers, park facilities, cottages, shops, etc.)
 
             ``` python
             #Local variables
@@ -225,17 +225,23 @@ output_raster2070 = ("C:/BOHA_SpatialDecisionSupportSystem/Data/CoastalExposure_
 
 #Raster Calculator
 #SLR 2030
-output1 = (((BR_Grid*20) + (SS_Grid*10) + (VegLC_Grid*10) + (Elev_Grid*30) + (SLR2030_CFEP10*30)) * (SLR2030_CFEP1)*(FR_Grid))
+output1 = (((BR_Grid*20) + (SS_Grid*10) + (VegLC_Grid*10) + (Elev_Grid*30) + (SLR2030_CFEP10*30)) * 
+           (SLR2030_CFEP1)*
+           (FR_Grid))
 
 output1.save(output_raster2030)
 
 #SLR 2050
-output2 = (((BR_Grid*20) + (SS_Grid*10) + (VegLC_Grid*10) + (Elev_Grid*30) + (SLR2050_CFEP10*30)) * (SLR2050_CFEP1)*(FR_Grid))
+output2 = (((BR_Grid*20) + (SS_Grid*10) + (VegLC_Grid*10) + (Elev_Grid*30) + (SLR2050_CFEP10*30)) * 
+           (SLR2050_CFEP1)*
+           (FR_Grid))
 
 output2.save(output_raster2050)
 
 #SLR 2070
-output3 = (((BR_Grid*20) + (SS_Grid*10) + (VegLC_Grid*10) + (Elev_Grid*30) + (SLR2070_CFEP10*30)) * (SLR2070_CFEP1)*(FR_Grid))
+output3 = (((BR_Grid*20) + (SS_Grid*10) + (VegLC_Grid*10) + (Elev_Grid*30) + (SLR2070_CFEP10*30)) * 
+           (SLR2070_CFEP1)*
+           (FR_Grid))
 
 output3.save(output_raster2070)
 ```

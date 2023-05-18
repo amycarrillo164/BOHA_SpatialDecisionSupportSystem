@@ -79,12 +79,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="multicritera-evaluation-1" class="level1">
-<h1>Multicritera Evaluation #1</h1>
-<section id="data-clean-up" class="level2">
-<h2 class="anchored" data-anchor-id="data-clean-up">Data Clean-Up</h2>
-<section id="methodology" class="level3">
-<h3 class="anchored" data-anchor-id="methodology">Methodology</h3>
+<section id="focal-resources-coastal-exposure-analysis" class="level1">
+<h1>Focal Resources Coastal Exposure Analysis</h1>
+<section id="methodology" class="level2">
+<h2 class="anchored" data-anchor-id="methodology">Methodology</h2>
+<section id="overview-of-steps" class="level3">
+<h3 class="anchored" data-anchor-id="overview-of-steps">Overview of steps:</h3>
 <ul>
 <li>Turn cultural resources, natural resource, infrastructure/facilities into a mosaic raster.</li>
 <li>Re-scale the elevation measurements so the lowest elevation is 1 and the highest elevation is 0.</li>
@@ -103,16 +103,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="workspace-5"><a href="#workspace-5" aria-hidden="true" tabindex="-1"></a>arcpy.env.workspace <span class="op">=</span> <span class="st">"C:/BOHA_SpatialDecisionSupportSystem/Data"</span></span>
 <span id="workspace-6"><a href="#workspace-6" aria-hidden="true" tabindex="-1"></a>env.scratchWorkspace <span class="op">=</span><span class="st">"C:/BOHA_SpatialDecisionSupportSystem/Data/Raster_Scratch.gdb"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="data-processing-and-clean-up-for-mce-1-raster-grid-inputs" class="level3">
-<h3 class="anchored" data-anchor-id="data-processing-and-clean-up-for-mce-1-raster-grid-inputs">Data processing and clean-up for MCE #1 raster grid inputs</h3>
+<section id="data-processing-and-clean-up-for-coastal-exposure-raster-grid-inputs" class="level3">
+<h3 class="anchored" data-anchor-id="data-processing-and-clean-up-for-coastal-exposure-raster-grid-inputs">Data processing and clean-up for Coastal Exposure raster grid inputs</h3>
 <ul>
 <li><p><strong>R1. Focal Resources Raster Mosaic.</strong></p>
 <ul>
-<li><p>The “Focal_Resources_Polys_Merge” vector polygon layer contains the following:</p>
+<li><p><span class="smallcaps">Focal Resources</span></p>
 <ul>
-<li><p>Input Group 1: Natural Resources (salt marshes, coastal bird habitats, coastal dunes, rare plant species,</p></li>
-<li><p>Input Group 2: Cultural Resources (National Historic Landmarks, Native American burial sites, etc.)</p></li>
-<li><p>Input Group 3: Infrastructure/Facilties (piers, park facilities, cottages, shops, etc.)</p>
+<li><p><em>Input Group 1:</em> Natural Resources (salt marshes, coastal bird habitats, coastal dunes, rare plant species,</p></li>
+<li><p><em>Input Group 2</em>: Cultural Resources (National Historic Landmarks, Native American burial sites, etc.)</p></li>
+<li><p><em>Input Group 3</em>: Infrastructure/Facilties (piers, park facilities, cottages, shops, etc.)</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Local variables</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>Focal_Resources_Polys_Merge <span class="op">=</span> <span class="st">"Vector_Data.gdb/Focal_Resources_Polys_Merge"</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Output_Raster_Dataset <span class="op">=</span> (<span class="st">"C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_Project/BOHA_SpatialDecisionSupportSystem/Data/Raster_Scratch.gdb/FR_Merge_PolygonToRaster"</span>)</span>
@@ -278,19 +278,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co">#Raster Calculator</span></span>
 <span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="co">#SLR 2030</span></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>output1 <span class="op">=</span> (((BR_Grid<span class="op">*</span><span class="dv">20</span>) <span class="op">+</span> (SS_Grid<span class="op">*</span><span class="dv">10</span>) <span class="op">+</span> (VegLC_Grid<span class="op">*</span><span class="dv">10</span>) <span class="op">+</span> (Elev_Grid<span class="op">*</span><span class="dv">30</span>) <span class="op">+</span> (SLR2030_CFEP10<span class="op">*</span><span class="dv">30</span>)) <span class="op">*</span> (SLR2030_CFEP1)<span class="op">*</span>(FR_Grid))</span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>output1.save(output_raster2030)</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>output1 <span class="op">=</span> (((BR_Grid<span class="op">*</span><span class="dv">20</span>) <span class="op">+</span> (SS_Grid<span class="op">*</span><span class="dv">10</span>) <span class="op">+</span> (VegLC_Grid<span class="op">*</span><span class="dv">10</span>) <span class="op">+</span> (Elev_Grid<span class="op">*</span><span class="dv">30</span>) <span class="op">+</span> (SLR2030_CFEP10<span class="op">*</span><span class="dv">30</span>)) <span class="op">*</span> </span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>           (SLR2030_CFEP1)<span class="op">*</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>           (FR_Grid))</span>
 <span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="co">#SLR 2050</span></span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>output2 <span class="op">=</span> (((BR_Grid<span class="op">*</span><span class="dv">20</span>) <span class="op">+</span> (SS_Grid<span class="op">*</span><span class="dv">10</span>) <span class="op">+</span> (VegLC_Grid<span class="op">*</span><span class="dv">10</span>) <span class="op">+</span> (Elev_Grid<span class="op">*</span><span class="dv">30</span>) <span class="op">+</span> (SLR2050_CFEP10<span class="op">*</span><span class="dv">30</span>)) <span class="op">*</span> (SLR2050_CFEP1)<span class="op">*</span>(FR_Grid))</span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>output2.save(output_raster2050)</span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="co">#SLR 2070</span></span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>output3 <span class="op">=</span> (((BR_Grid<span class="op">*</span><span class="dv">20</span>) <span class="op">+</span> (SS_Grid<span class="op">*</span><span class="dv">10</span>) <span class="op">+</span> (VegLC_Grid<span class="op">*</span><span class="dv">10</span>) <span class="op">+</span> (Elev_Grid<span class="op">*</span><span class="dv">30</span>) <span class="op">+</span> (SLR2070_CFEP10<span class="op">*</span><span class="dv">30</span>)) <span class="op">*</span> (SLR2070_CFEP1)<span class="op">*</span>(FR_Grid))</span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>output3.save(output_raster2070)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>output1.save(output_raster2030)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="co">#SLR 2050</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>output2 <span class="op">=</span> (((BR_Grid<span class="op">*</span><span class="dv">20</span>) <span class="op">+</span> (SS_Grid<span class="op">*</span><span class="dv">10</span>) <span class="op">+</span> (VegLC_Grid<span class="op">*</span><span class="dv">10</span>) <span class="op">+</span> (Elev_Grid<span class="op">*</span><span class="dv">30</span>) <span class="op">+</span> (SLR2050_CFEP10<span class="op">*</span><span class="dv">30</span>)) <span class="op">*</span> </span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>           (SLR2050_CFEP1)<span class="op">*</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>           (FR_Grid))</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>output2.save(output_raster2050)</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="co">#SLR 2070</span></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>output3 <span class="op">=</span> (((BR_Grid<span class="op">*</span><span class="dv">20</span>) <span class="op">+</span> (SS_Grid<span class="op">*</span><span class="dv">10</span>) <span class="op">+</span> (VegLC_Grid<span class="op">*</span><span class="dv">10</span>) <span class="op">+</span> (Elev_Grid<span class="op">*</span><span class="dv">30</span>) <span class="op">+</span> (SLR2070_CFEP10<span class="op">*</span><span class="dv">30</span>)) <span class="op">*</span> </span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>           (SLR2070_CFEP1)<span class="op">*</span></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>           (FR_Grid))</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>output3.save(output_raster2070)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
