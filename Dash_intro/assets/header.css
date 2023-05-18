@@ -1,7 +1,7 @@
 .app-header {
     height: 60px;
     line-height: 50px;
-    /* border-bottom: thin lightgrey solid; */
+    border-bottom: thin lightgrey solid;
 }
 
 .app-header .app-header--title {

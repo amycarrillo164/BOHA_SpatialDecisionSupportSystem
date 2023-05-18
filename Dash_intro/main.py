@@ -45,7 +45,11 @@ app.layout = dbc.Container([
         ]),
 
     html.Div([
-        dcc.Dropdown(id = 'dropdown_FR', options = ['Natural_Resources','Cultural_Resources', 'Infrastructure_Facilities'], multi=True, placeholder= "Focal Resource"),
+        dcc.Dropdown(id = 'dropdown_FR', options = [
+            {'label': 'Natural Resources', 'value': 'Natural_Resources'},
+            {'label': 'Cultural Resources', 'value': 'Cultural_Resources'},
+            {'label': 'Infrastructure Facilities', 'value': 'Infrastructure_Facilities'}], 
+            multi=True, placeholder= "Focal Resource"),
         #dcc.Dropdown(id = 'dropdown_Priority', options = ['Low','Medium', 'High'], multi=True, placeholder="Priority Level"),
         #dcc.Input(id = 'input_Gridcode', type = 'number', inputMode = 'numeric', value = '4',
          #         max = 4, min = 1, step = 1, placeholder= "Coastal Exposure Grid Code"),
