@@ -23,6 +23,14 @@
     <!-- <link rel="stylesheet" type="text/css" href="css/leaflet-search.css" /> -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.8.0/dist/geosearch.css" />
 
+    <!-- time line slider -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+    integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+    integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+    crossorigin=""></script>
+
 
     
     <title>Home</title>
@@ -111,31 +119,6 @@
           <p>Thompson, Lovells, Peddocks, Georges, Gallops, Long, Little Brewster, Great Brewster, and Calf </p>
       </div>
 
-  <!-- container for click-able SLR -->
-  <!-- <div class = "col-md-9 ml-sm-auto col-lg-10 px-4">
-    <div class="card text-center">
-      <div class="card_body">
-        <ul class="nav nav-tabs card-header-tabs">
-
-          <li class="nav-item">
-            <a class="nav-link disabled" href="index.html"> <h>SLR Scenerios</h> </a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="index.html"> 2030 </a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="map_SLR2.html"> 2050 </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="map_SLR3.html"> 2070 </a>
-
-          </li>
-
-        </ul>
-      </div>
-    </div> -->
   </main>
 
     <!-- Optional JavaScript -->
@@ -183,6 +166,9 @@
     <link rel="stylesheet" href="./css/Control.FullScreen.css" />
     <script src="./js/Control.FullScreen.js"></script>
     
+    <!-- timeline slider -->
+    <script src="js/leaflet-timeline-slider.js"></script>
+    
     <script>
      var fsControl = L.control.fullscreen();
      
@@ -215,6 +201,59 @@
           },
       });
     map.addControl(controlSearch);
+    </script>
+  
+  <!-- time slider -->
+
+
+    <script>
+    changeFloodMap = function({label, map}){
+    // SLR_group_layers.clearLayers();
+    if(label == "2030"){ 
+      SLR2030_1_CFEP.addTo(map);
+      SLR2030_10_CFEP.addTo(map);
+      map.removeLayer(SLR2050_1_CFEP);
+      map.removeLayer(SLR2050_10_CFEP);
+      map.removeLayer(SLR2070_1_CFEP);
+      map.removeLayer(SLR2070_10_CFEP);
+    }
+    else if(label == "2050") {
+      //SLR2050_1_CFEP.push(layerGroup);
+      //map.addLayer(SLR2050_1_CFEP);
+      //console.log("hi");
+      SLR2050_1_CFEP.addTo(map);
+      SLR2050_10_CFEP.addTo(map);
+      map.removeLayer(SLR2030_1_CFEP);
+      map.removeLayer(SLR2030_10_CFEP);
+      map.removeLayer(SLR2070_1_CFEP);
+      map.removeLayer(SLR2070_10_CFEP);
+      
+      //L.geoJSON(c2050_1CFEP, {style: style_feature_SLR1,}).addTo(map);
+    }
+    else if(label == "2070"){
+      //SLR2070_1_CFEP.push(layerGroup);
+      //map.addLayer(SLR2070_1_CFEP);
+      SLR2070_1_CFEP.addTo(map);
+      SLR2070_10_CFEP.addTo(map);
+      map.removeLayer(SLR2030_1_CFEP);
+      map.removeLayer(SLR2030_10_CFEP);
+      map.removeLayer(SLR2050_1_CFEP);
+      map.removeLayer(SLR2050_10_CFEP);
+      
+      //L.geoJSON(c2070_1CFEP, {style: style_feature_SLR1,}).addTo(map);
+    }
+    //else 
+     // console.log("hi");
+            
+    };
+
+    L.control.timelineSlider({
+      timelineItems: ["2030", "2050", "2070"],
+      changeMap: changeFloodMap})
+      .addTo(map);
+
+    
+
     </script>
 
   </body>

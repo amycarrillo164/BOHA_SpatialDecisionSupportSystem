@@ -239,7 +239,8 @@ var Centroid_FR_Merge = L.geoJson(null, {
     return L.circleMarker(latlng, geojsonMarkerOptions);
   },
 })
-.addTo(map);
+// .addTo(map)
+;
 
 Centroid_FR_Merge.bringToFront();
 
@@ -460,7 +461,7 @@ fetch("geojson_files/Centroid_FR_Merge2.geojson")
 })
 .then((data) => {
   console.log(data);
-  Centroid_FR_Merge.addData(data);
+  // Centroid_FR_Merge.addData(data);
   });
 
 
