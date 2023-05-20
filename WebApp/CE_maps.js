@@ -74,6 +74,9 @@ function onEachFeaturePoly(feature, layer) {
   });
 }
 
+// Find and fit map to feature
+
+
 // style function for focal resources polys
 function style_feature_frpolys(feature) {
   return {
@@ -107,7 +110,7 @@ function updateDataTable (map) {
 }
 
 
-// script for circle markers
+// script for styling circle markers
 var geojsonMarkerOptions = {
   radius: 3,
   fillColor: "#6693f5",
@@ -142,18 +145,16 @@ var terrain = L.tileLayer('https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}
 var googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
     subdomains:['mt0','mt1','mt2','mt3'],
 });
-//.addTo(map); 
 
 //Layer group
 var baseMaps = {
     "Google Earth Satellite": googleSat,
     "Carto Light": light,
     "Stamen Terrain": terrain, 
-
 };
 
 
-// control that shows state info on hover
+// Hover Info Box
 const info = L.control();
 
 info.onAdd = function (map) {
@@ -171,10 +172,8 @@ info.addTo(map);
 
 
 //Creating variables for data
-//category polygons
 var nat_polygons = L.geoJson(nat_polys, {style: style_feature_frpolys, onEachFeature: onEachFeaturePoly,})
 //.addTo(map);
-
 
 var infra_polygons = L.geoJson(infra_polys, {style: style_feature_frpolys, onEachFeature: onEachFeaturePoly,})
 //.addTo(map);
@@ -182,7 +181,7 @@ var infra_polygons = L.geoJson(infra_polys, {style: style_feature_frpolys, onEac
 var cultural_polygons = L.geoJson(cultural_polys, {style: style_feature_frpolys, onEachFeature: onEachFeaturePoly,})
 //.addTo(map);
 
-// Polygons (Geojson)
+
 
 // Creating variable & style for Coastal Exposure 2030
 var CE_2030 = L.geoJSON(null, {
@@ -233,26 +232,25 @@ var Boundary = L.geoJSON(null, {
 }).addTo(map);
 
 //Creating variable & style for centroid merge points
-var Centroid_FR_Merge = L.geoJson(null, {
-  pane: 'fr_pane',
-  pointToLayer: function (feature, latlng) {
-    return L.circleMarker(latlng, geojsonMarkerOptions);
-  },
-})
-// .addTo(map)
-;
+// var Centroid_FR_Merge = L.geoJson(null, {
+//   pane: 'fr_pane',
+//   pointToLayer: function (feature, latlng) {
+//     return L.circleMarker(latlng, geojsonMarkerOptions);
+//   },
+// })
+// // .addTo(map)
+// ;
 
-Centroid_FR_Merge.bringToFront();
+// Centroid_FR_Merge.bringToFront();
 
 // Layers
-
 var cultural_polygons_layer = L.layerGroup([cultural_polygons]);
 var nat_polygons_layer = L.layerGroup([nat_polygons]);
 var infra_polygons_layer = L.layerGroup([infra_polygons]);
 var CE_2030_layer = L.layerGroup([CE_2030]);
 var CE_2050_layer = L.layerGroup([CE_2050]);
 var CE_2070_layer = L.layerGroup([CE_2070]);
-var centroid_points = L.layerGroup([fr_points]);
+//var centroid_points = L.layerGroup([fr_points]);
 var Boundary_9Islands = L.layerGroup([Boundary]);
 
 
@@ -266,7 +264,7 @@ var overlayMaps = {
     "Cultural Resources Polygons" : cultural_polygons_layer,
     "Natural Resources Polygons" : nat_polygons_layer,
     "Infrastructure/Facilties Polygons" : infra_polygons_layer,
-    "Centroid Focal Resource Points" : centroid_points,
+    //"Centroid Focal Resource Points" : centroid_points,
     "9 Islands Boundary" : Boundary_9Islands,
     
 };
@@ -275,7 +273,7 @@ var overlayMaps = {
 //Layer box for all layer groups
 var layerControl = L.control
   .layers(baseMaps, overlayMaps, {
-    collapsed: true,
+    collapsed: false,
     hideSingleBase: true,
   })
   .addTo(map)
@@ -312,16 +310,110 @@ legend.onAdd = function(map) {
 legend.addTo(map);
 
 
-// FETCHING DATA
+// Function for CE slider
+changeCEMap = function({label, map}){
+  if(label == "2030"){ 
+    CE_2030_layer.addTo(map);
+    map.removeLayer(CE_2050_layer);
+    map.removeLayer(CE_2070_layer);
+  }
+  else if(label == "2050") {
+    CE_2050_layer.addTo(map);
+    map.removeLayer(CE_2030_layer);
+    map.removeLayer(CE_2070_layer);
+  }
 
-// Fetch BOHA Boundary
-fetch("geojson_files/BOHA_Boundary.geojson")
+  else if(label == "2070"){
+    CE_2070_layer.addTo(map);
+    map.removeLayer(CE_2030_layer);
+    map.removeLayer(CE_2050_layer);
+  }
+}; 
+
+let geoJSON2DataArray = (d) => {
+  let datArray = Array(d.getLayers().length).fill(null), i = 0;
+
+  d.eachLayer(l => {
+    datArray[i++] = l.feature.properties;
+  })
+
+  return datArray;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+//table data
+
+/////////////////////////////////////////////////////////////////////////
+
+//creds to sun...table data
+
+// let fitLayerFeature = (m, layerArray, layerName, featureID) => {
+//   let mapL = layerArray[layerName];
+//   if (!mapL) return;
+
+//   mapL.eachLayer(l => {
+//     if (l.feature.properties.id == featureID) {
+//       m.fitBounds(l.getBounds());
+//       return;
+//     }
+//   })
+
+// };
+
+// //Tabulator data table
+// var table = new Tabulator("#example-table", {
+//   data: tabledat,
+//   autoColumns:true,
+//   movableColumns:true,
+//   resizableRows:true,
+//   layout:"fitColumns",
+//   height:"311px",
+// });
+  
+//   table.on("rowSelectionChanged", function (data, rows) {
+//     if (data.length == 1 && rowSelectSource == 'table') {
+//       // layer is targetLayer and id is data.id
+//       fitLayerFeature(map, jsonMapLayers, targetLayer, data[0].id);
+//     }
+//     rowSelectSource = 'table';
+//   });
+
+// //// From map layer to table row
+//     l.on({
+//       mouseover: (e) => {
+//         e.target.setStyle({
+//           fillColor: "#000",
+//           fillOpacity: l.options.fillOpacity + 0.2,
+//           weight: 2,
+//         });
+
+//         if(tableObj) {
+//           //e.stopPropagation();
+//           rowSelectSource = 'map';
+//           tableObj.selectRow(l.feature.properties.id);
+//           tableObj.scrollToRow(l.feature.properties.id, "top", false);
+//         }
+//       },
+//       mouseout: (e) => {
+//         jsonMapLayers[dataNames[i]].resetStyle(e.target);
+//         if(tableObj) tableObj.deselectRow(l.feature.properties.id);
+//       },
+//     });
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////// 
+//FETCHING DATA
+
+// Fetch All Resources Polygons
+fetch("geojson_files/FR_Merge_Polys)MCE2.geojson")
 .then((response) => {
   return response.json();
 })
 .then((data) => {
   console.log(data);
-  Boundary.addData(data);
+  All_Rescources.addData(data);
   });
 
 // Fetch BOHA Boundary
@@ -455,24 +547,24 @@ fetch("./geojson_files/SLR3_MCE_RiskOutputs_poly.geojson")
 
 
 // Fetch centroid points
-fetch("geojson_files/Centroid_FR_Merge2.geojson")
-.then((response) => {
-  return response.json();
-})
-.then((data) => {
-  console.log(data);
-  // Centroid_FR_Merge.addData(data);
-  });
+// fetch("geojson_files/centroid_focalresources.geojson")
+// .then((response) => {
+//   return response.json();
+// })
+// .then((data) => {
+//   console.log(data);
+//   // Centroid_FR_Merge.addData(data);
+//   });
 
+
+//STOP
 
 // Tabulator data table
 var table = new Tabulator("#example-table", {
-  data: tabledata,
+  data: tabledat,
   autoColumns:true,
   movableColumns:true,
   resizableRows:true,
   layout:"fitColumns",
   height:"311px",
 });
-
-//STOP

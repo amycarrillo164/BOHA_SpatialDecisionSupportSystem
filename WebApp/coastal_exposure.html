@@ -3,30 +3,27 @@
   <head>
     <!-- Required meta tages -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">    
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="css/dashboard.css" >
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-
     <!-- Map CSS -->    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
-    
-    <!-- search bar css -->
+    <!-- Search bar css -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.0/dist/leaflet.css" />
-
-    <!-- full screen controls -->
-    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css'
-    rel='stylesheet' />
-
-    <!-- <link rel="stylesheet" type="text/css" href="css/leaflet-search.css" /> -->
+    <!-- Full screen controls -->
+    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.8.0/dist/geosearch.css" />
     
     <!-- data table -->
     <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
 
+    <!-- time line slider -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
+    
     <title>Coastal Exposure</title>
 
 </head>
@@ -40,12 +37,11 @@
     <main role = "main">
       <h3 id = 'SLR1_titleid'> Coastal Exposure Analysis </h3>
         <!-- <hr> -->
-    
-    
+      
     <!-- Main stage container -->
     <div class = "row">
 
-    <!-- New side bar container -->
+    <!-- Side bar container -->
       <div class = "col-sm-auto">
         <div class="col-sm-auto bg-light sticky-top"></div>
             <div class="d-flex flex-sm-column flex-row flex-nowrap flex-shrink-0 bg-light" style="width: 1rem;">
@@ -101,7 +97,7 @@
         </div>
       </div>
 
-      <!-- leaflet map -->
+      <!-- Leaflet map -->
       <div class = "col">  
         <div id='map' style='width: 89vw; height: 72vh; color:black'>
         </div>
@@ -134,7 +130,7 @@
     <script src="./js_datafiles/infra_polys.js"></script>
     <script src="./js_datafiles/nat_polys.js"></script>
     <!-- js data files > data table -->
-    <script src = "js_datafiles/table_data.js"></script>
+    <script src = "js_datafiles/table_data2.js"></script>
 
     <!-- leaflet -->
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
@@ -169,12 +165,16 @@
     <link rel="stylesheet" href="./css/Control.FullScreen.css" />
     <script src="./js/Control.FullScreen.js"></script>
 
+    <!-- Script for nearest neighbor & Popups -->
+    <!-- <script src="./geojson_files/centroid_focalresources.js"></script>
+    <script src="./js/leaflet_knn.js"></script> -->
+
+    <!-- timeline slider -->
+    <script src="js/leaflet-timeline-slider.js"></script>
 
     
     <script>
     var fsControl = L.control.fullscreen();
-		
-    
     // add fullscreen control to the map
 		map.addControl(fsControl);
 
@@ -208,9 +208,7 @@
     </script>
 
     <!-- Script for nearest neighbor & Popups -->
-    <script src="./geojson_files/centroid_focalresources.js"></script>
-    <script src="./js/leaflet_knn.js"></script>
-    <script>
+    <!-- <script>
       var fr_points = L.geoJson(fr_points, {
         pointToLayer: function (feature, latlng) {
             return L.circleMarker(latlng, geojsonMarkerOptions);
@@ -221,9 +219,33 @@
         var nearestResult = pointIndex.nearest(ev.latlng,1)[0];
         nearestResult.layer.bindPopup("I'm the nearest point!").openPopup();
       })      
+    </script> -->
+
+    <!-- timeline slider -->
+    <script>
+      // Function for CE slider
+    changeCEMap = function({label, map}){
+      if(label == "2030"){ 
+        CE_2030_layer.addTo(map);
+        map.removeLayer(CE_2050_layer);
+        map.removeLayer(CE_2070_layer);
+      }
+      else if(label == "2050") {
+        CE_2050_layer.addTo(map);
+        map.removeLayer(CE_2030_layer);
+        map.removeLayer(CE_2070_layer);
+      }
+
+      else if(label == "2070"){
+        CE_2070_layer.addTo(map);
+        map.removeLayer(CE_2030_layer);
+        map.removeLayer(CE_2050_layer);
+      }
+      }; 
+      L.control.timelineSlider({
+        timelineItems: ["2030", "2050", "2070"],
+        changeMap: changeCEMap}).addTo(map);
     </script>
-
-
 
     
   </body>
