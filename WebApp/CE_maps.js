@@ -180,7 +180,7 @@ var infra_polygons = L.geoJson(infra_polys, {style: style_feature_frpolys, onEac
 
 var cultural_polygons = L.geoJson(cultural_polys, {style: style_feature_frpolys, onEachFeature: onEachFeaturePoly,})
 //.addTo(map);
-
+//var tabledata = L.geoJson(tableDat, {style: style_feature_frpolys, onEachFeature: onEachFeaturePoly,})
 
 
 // Creating variable & style for Coastal Exposure 2030
@@ -252,6 +252,7 @@ var CE_2050_layer = L.layerGroup([CE_2050]);
 var CE_2070_layer = L.layerGroup([CE_2070]);
 //var centroid_points = L.layerGroup([fr_points]);
 var Boundary_9Islands = L.layerGroup([Boundary]);
+//var tableDat = L.layerGroup([tableDat]);
 
 
 //Layer groups
@@ -266,6 +267,7 @@ var overlayMaps = {
     "Infrastructure/Facilties Polygons" : infra_polygons_layer,
     //"Centroid Focal Resource Points" : centroid_points,
     "9 Islands Boundary" : Boundary_9Islands,
+    //"All Resources": tabledata,
     
 };
 
@@ -330,75 +332,99 @@ changeCEMap = function({label, map}){
   }
 }; 
 
-let geoJSON2DataArray = (d) => {
-  let datArray = Array(d.getLayers().length).fill(null), i = 0;
-
-  d.eachLayer(l => {
-    datArray[i++] = l.feature.properties;
-  })
-
-  return datArray;
-}
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //table data
 
 /////////////////////////////////////////////////////////////////////////
 
-//creds to sun...table data
 
-// let fitLayerFeature = (m, layerArray, layerName, featureID) => {
-//   let mapL = layerArray[layerName];
-//   if (!mapL) return;
+// var jsonMapLayers = L.geoJson(tableDat, {style: style_feature_frpolys, onEachFeature: onEachFeaturePoly,})
 
-//   mapL.eachLayer(l => {
-//     if (l.feature.properties.id == featureID) {
-//       m.fitBounds(l.getBounds());
-//       return;
-//     }
+// let geoJSON2DataArray = (d) => {
+//   let datArray = Array(d.getLayers().length).fill(null), i = 0;
+
+//   d.eachLayer(l => {
+//     datArray[i++] = l.feature.properties;
 //   })
 
-// };
+//   return datArray;
+// }
 
-// //Tabulator data table
-// var table = new Tabulator("#example-table", {
-//   data: tabledat,
-//   autoColumns:true,
-//   movableColumns:true,
-//   resizableRows:true,
-//   layout:"fitColumns",
-//   height:"311px",
-// });
-  
-//   table.on("rowSelectionChanged", function (data, rows) {
-//     if (data.length == 1 && rowSelectSource == 'table') {
-//       // layer is targetLayer and id is data.id
-//       fitLayerFeature(map, jsonMapLayers, targetLayer, data[0].id);
-//     }
-//     rowSelectSource = 'table';
-//   });
+// let tabledata2 = geoJSON2DataArray(jsonMapLayers[tableDat])
 
-// //// From map layer to table row
-//     l.on({
-//       mouseover: (e) => {
-//         e.target.setStyle({
-//           fillColor: "#000",
-//           fillOpacity: l.options.fillOpacity + 0.2,
-//           weight: 2,
-//         });
+//////////////////////////////////////////////
 
-//         if(tableObj) {
-//           //e.stopPropagation();
-//           rowSelectSource = 'map';
-//           tableObj.selectRow(l.feature.properties.id);
-//           tableObj.scrollToRow(l.feature.properties.id, "top", false);
-//         }
-//       },
-//       mouseout: (e) => {
-//         jsonMapLayers[dataNames[i]].resetStyle(e.target);
-//         if(tableObj) tableObj.deselectRow(l.feature.properties.id);
-//       },
-//     });
+//data table
+
+var table = new Tabulator("#example-table", {
+  data: tabledata,
+  //autoColumns:true,
+  movableColumns:true,
+  resizableRows:true,
+  //index: 'id',
+  layout:"fitColumns",
+  height:"311px",
+  columns: [
+    {title: "ID", field: "ORIG_FID", visible:false},
+    {title: "ID", field: "ï»¿OID", visible:false},
+    {title: "Category", field: "Category", visible:true},
+    {title: "Description", field: "Descriptio", visible:true},
+    {title: "Island", field: "Island", visible:true},
+    {title: "FID", field: "ORIG_FID", visible:false},
+    {title: "Latitude", field: "Latitude", visible:false},
+    {title: "Longitude", field: "Longitude", visible:false},
+    {title: "Risk 2030", field: "gridcode_2030", visible:true},
+    //{title:"Risk 2030", field:"gridcode_2030", sorter:"number", hozAlign:"left", formatter:"progress", width:100,  editable:true},
+    {title: "Risk 2050", field: "gridcode2050", visible:true},
+    {title: "Risk 2070", field: "gridcode_2030", visible:true},
+    
+
+  ],
+  index: 'ORIG_FID',
+      selectable: 1, //make rows selectable
+      initialSort: [{column:"ORIG_FID", dir:"asc"}],
+     }
+    );
+    
+    table.on("rowSelectionChanged", function (data, rows) {
+      if (data.length == 1 && rowSelectSource == 'table') {
+        // layer is targetLayer and id is data.id
+        fitLayerFeature(map, jsonMapLayers, targetLayer, data[0].id);
+      }
+      rowSelectSource = 'table';
+    });
+
+  table.on("rowSelectionChanged", function (data, rows) {
+    if (data.length == 1 && rowSelectSource == 'table') {
+      // layer is targetLayer and id is data.id
+      fitLayerFeature(map, jsonMapLayers, targetLayer, data[0].id);
+    }
+    rowSelectSource = 'table';
+  });
+
+
+// // //// From map layer to table row
+  // l.on({
+  //   mouseover: (e) => {
+  //     e.target.setStyle({
+  //       fillColor: "#000",
+  //       fillOpacity: l.options.fillOpacity + 0.2,
+  //       weight: 2,
+  //     });
+
+  //     if(tableObj) {
+  //       //e.stopPropagation();
+  //       rowSelectSource = 'map';
+  //       tableObj.selectRow(l.feature.properties.id);
+  //       tableObj.scrollToRow(l.feature.properties.id, "top", false);
+  //     }
+  //   },
+  //   mouseout: (e) => {
+  //     jsonMapLayers[dataNames[i]].resetStyle(e.target);
+  //     if(tableObj) tableObj.deselectRow(l.feature.properties.id);
+  //   },
+  // });
 
 
 
@@ -406,14 +432,14 @@ let geoJSON2DataArray = (d) => {
 //////////////////////////////////////////////////////////////////////////////////////// 
 //FETCHING DATA
 
-// Fetch All Resources Polygons
-fetch("geojson_files/FR_Merge_Polys)MCE2.geojson")
+// Fetch table data
+fetch("geojson_files/FR_Merge_Polys_MCE2.geojson")
 .then((response) => {
   return response.json();
 })
 .then((data) => {
   console.log(data);
-  All_Rescources.addData(data);
+  tableDat.addData(data);
   });
 
 // Fetch BOHA Boundary
@@ -560,11 +586,11 @@ fetch("./geojson_files/SLR3_MCE_RiskOutputs_poly.geojson")
 //STOP
 
 // Tabulator data table
-var table = new Tabulator("#example-table", {
-  data: tabledat,
-  autoColumns:true,
-  movableColumns:true,
-  resizableRows:true,
-  layout:"fitColumns",
-  height:"311px",
-});
+// var table = new Tabulator("#example-table", {
+//   data: tabledat,
+//   autoColumns:true,
+//   movableColumns:true,
+//   resizableRows:true,
+//   layout:"fitColumns",
+//   height:"311px",
+// });
