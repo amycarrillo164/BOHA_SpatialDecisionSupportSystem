@@ -1,0 +1,13 @@
+.app-header {
+    height: 40px;
+    line-height: 30px;
+    text-align: right;
+    /* border-bottom: thin lightgrey solid; */
+}
+
+.app-header .app-header--title {
+    font-size: 18px;
+    padding-left: 5px;
+    margin-top: 10px;
+}
+
