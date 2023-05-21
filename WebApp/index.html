@@ -169,10 +169,9 @@
     <!-- timeline slider -->
     <script src="js/leaflet-timeline-slider.js"></script>
     
+
     <script>
-     var fsControl = L.control.fullscreen();
-     
-     
+     var fsControl = L.control.fullscreen(); 
      // add fullscreen control to the map
      map.addControl(fsControl);
  
@@ -203,58 +202,14 @@
     map.addControl(controlSearch);
     </script>
   
-  <!-- time slider -->
-
-
-    <script>
-    changeFloodMap = function({label, map}){
-    // SLR_group_layers.clearLayers();
-    if(label == "2030"){ 
-      SLR2030_1_CFEP.addTo(map);
-      SLR2030_10_CFEP.addTo(map);
-      map.removeLayer(SLR2050_1_CFEP);
-      map.removeLayer(SLR2050_10_CFEP);
-      map.removeLayer(SLR2070_1_CFEP);
-      map.removeLayer(SLR2070_10_CFEP);
-    }
-    else if(label == "2050") {
-      //SLR2050_1_CFEP.push(layerGroup);
-      //map.addLayer(SLR2050_1_CFEP);
-      //console.log("hi");
-      SLR2050_1_CFEP.addTo(map);
-      SLR2050_10_CFEP.addTo(map);
-      map.removeLayer(SLR2030_1_CFEP);
-      map.removeLayer(SLR2030_10_CFEP);
-      map.removeLayer(SLR2070_1_CFEP);
-      map.removeLayer(SLR2070_10_CFEP);
-      
-      //L.geoJSON(c2050_1CFEP, {style: style_feature_SLR1,}).addTo(map);
-    }
-    else if(label == "2070"){
-      //SLR2070_1_CFEP.push(layerGroup);
-      //map.addLayer(SLR2070_1_CFEP);
-      SLR2070_1_CFEP.addTo(map);
-      SLR2070_10_CFEP.addTo(map);
-      map.removeLayer(SLR2030_1_CFEP);
-      map.removeLayer(SLR2030_10_CFEP);
-      map.removeLayer(SLR2050_1_CFEP);
-      map.removeLayer(SLR2050_10_CFEP);
-      
-      //L.geoJSON(c2070_1CFEP, {style: style_feature_SLR1,}).addTo(map);
-    }
-    //else 
-     // console.log("hi");
-            
-    };
-
+  <!-- timeline slider -->
+  <script>
     L.control.timelineSlider({
       timelineItems: ["2030", "2050", "2070"],
       changeMap: changeFloodMap})
       .addTo(map);
 
-    
-
-    </script>
+  </script>
 
   </body>
 </html>

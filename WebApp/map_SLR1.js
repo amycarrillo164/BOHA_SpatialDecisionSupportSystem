@@ -70,9 +70,6 @@ var googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
 }).addTo(map);
 
 
-
-
-
 //Layer group
 var baseMaps = {
     "Google Earth Satellite": googleSat,
@@ -160,8 +157,8 @@ var Boundary = L.geoJSON(null, {
 
 
 // var marker = L.geoJSON(null, {}); 
-var c2030_1CFEP = L.geoJSON(null, {style: style_feature_SLR1,})//.addTo(map);
-var c2030_10CFEP = L.geoJSON(null, {style: style_feature_SLR10,})//.addTo(map);
+var c2030_1CFEP = L.geoJSON(null, {style: style_feature_SLR1,}).addTo(map);
+var c2030_10CFEP = L.geoJSON(null, {style: style_feature_SLR10,}).addTo(map);
 var c2050_1CFEP = L.geoJSON(null, {style: style_feature_SLR1,});
 var c2050_10CFEP = L.geoJSON(null, {style: style_feature_SLR10,}); 
 var c2070_1CFEP = L.geoJSON(null, {style: style_feature_SLR1,}); 
@@ -178,39 +175,6 @@ var SLR2070_10_CFEP = L.layerGroup([c2070_10CFEP]);
 var SLR2070_1_CFEP = L.layerGroup([c2070_1CFEP]);
 // var marker_points = L.layerGroup([marker]);
 
-// changeFloodMap = function({timelineItems,map}){
-//   // SLR_group_layers.clearLayers();
-//   console.log(timelineItems);  
-//   if(timelineItems == "2030"){
-//     //SLR2030_1_CFEP.push(layerGroup);
-//     // map.laye(SLR2030_1_CFEP)
-//     console.log("hi");
-//     SLR2030_1_CFEP.addTo(map);
-//     //map.addLayer(SLR2030_1_CFEP);
-//     //L.geoJSON(c2030_1CFEP, {style: style_feature_SLR1,}).addTo(map);
-//   }
-//   else if(timelineItems == "2050") {
-//     //SLR2050_1_CFEP.push(layerGroup);
-//     //map.addLayer(SLR2050_1_CFEP);
-//     console.log("hi");
-//     SLR2030_1_CFEP.addTo(map);
-//     //L.geoJSON(c2050_1CFEP, {style: style_feature_SLR1,}).addTo(map);
-//   }
-//   else if(timelineItems == "2070"){
-//     //SLR2070_1_CFEP.push(layerGroup);
-//     //map.addLayer(SLR2070_1_CFEP);
-//     SLR2030_1_CFEP.addTo(map);
-//     //L.geoJSON(c2070_1CFEP, {style: style_feature_SLR1,}).addTo(map);
-//   }
-          
-// }; 
-// console.log("hi");
-
-//Layer group for SLR
-SLR2030_GL = new L.LayerGroup([c2030_1CFEP,c2030_10CFEP]);
-SLR2050_GL = new L.LayerGroup([c2050_1CFEP,c2050_10CFEP]);
-SLR2070_GL = new L.LayerGroup([c2070_1CFEP,c2070_10CFEP]);
-
 //Layer groups
 var overlayMaps = {
    //"cultural points" : data,
@@ -223,6 +187,7 @@ var overlayMaps = {
     "9 Islands Boundary" : Boundary_9Islands,
     // "Cultural & Infrastructure/Facilities" : marker_points,
 };
+
 
 //Layer box for all layer groups
 var layerControl = L.control
@@ -260,12 +225,34 @@ legend.onAdd = function(map) {
 
 legend.addTo(map);
 
+// Function for SLR slider
+changeFloodMap = function({label, map}){
+  if(label == "2030"){ 
+    SLR2030_1_CFEP.addTo(map);
+    SLR2030_10_CFEP.addTo(map);
+    map.removeLayer(SLR2050_1_CFEP);
+    map.removeLayer(SLR2050_10_CFEP);
+    map.removeLayer(SLR2070_1_CFEP);
+    map.removeLayer(SLR2070_10_CFEP);
+  }
+  else if(label == "2050") {
+    SLR2050_1_CFEP.addTo(map);
+    SLR2050_10_CFEP.addTo(map);
+    map.removeLayer(SLR2030_1_CFEP);
+    map.removeLayer(SLR2030_10_CFEP);
+    map.removeLayer(SLR2070_1_CFEP);
+    map.removeLayer(SLR2070_10_CFEP);
+  }
+  else if(label == "2070"){
+    SLR2070_1_CFEP.addTo(map);
+    SLR2070_10_CFEP.addTo(map);
+    map.removeLayer(SLR2030_1_CFEP);
+    map.removeLayer(SLR2030_10_CFEP);
+    map.removeLayer(SLR2050_1_CFEP);
+    map.removeLayer(SLR2050_10_CFEP);
+  }
+};  
 
-
-// L.control.timelineSlider({
-//     timelineItems: ["2030", "2050", "2070"],
-//     changeMap: changeFloodMap})
-//     .addTo(map);
 
 // FETCHING THE DATA
 

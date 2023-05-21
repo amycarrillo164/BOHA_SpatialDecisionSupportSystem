@@ -37,7 +37,7 @@ env.scratchWorkspace ="C:/BOHA_SpatialDecisionSupportSystem/Data/Raster_Scratch.
             ``` python
             #Local variables
             Focal_Resources_Polys_Merge = "Vector_Data.gdb/Focal_Resources_Polys_Merge"
-            Output_Raster_Dataset = ("C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_Project/BOHA_SpatialDecisionSupportSystem/Data/Raster_Scratch.gdb/FR_Merge_PolygonToRaster")
+            Output_Raster_Dataset = ("C:/BOHA_SpatialDecisionSupportSystem/Data/Raster_Scratch.gdb/FR_Merge_PolygonToRaster")
             FR_Grid = ("C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_Project/BOHA_SpatialDecisionSupportSystem/Data/Raster_Output.gdb/FR_Grid")
 
             # Step 1. Polygon to Raster (Polygon to Raster) (conversion)    
@@ -75,7 +75,7 @@ env.scratchWorkspace ="C:/BOHA_SpatialDecisionSupportSystem/Data/Raster_Scratch.
             BOHA_BluffsRetreating_EucDistance.save(in_raster_BR)
         in_raster_BR = arcpy.Raster(in_raster_BR)
 
-        #Step 2: Re-scale the distance from the sandy shorelines so the cells closest to sandy shorelines are 1 and the cells furthest from the sandy shorelines are 0.
+        #Step 2: Re-scale the distance from the fluff retreat zones so the cells closest to bluff retreat zones are 1 and the cells furthest from the bluff retreat zones are 0.
         BluffRetreat_Grid = (1-(in_raster_BR - in_raster_BR.minimum)/(in_raster_BR.maximum-in_raster_BR.minimum))
         BluffRetreat_Grid.save(BluffRetreat_Grid)
         ```
@@ -157,7 +157,7 @@ env.scratchWorkspace ="C:/BOHA_SpatialDecisionSupportSystem/Data/Raster_Scratch.
         Reclassify_c_10CFEP = c_10CFEP
 
         #Setting the environment (MassCZM_folder = SLR Scenarios 2030, 2050, 2070 and related CFEP Rasters)
-        for Raster, Name in MassCZM_folder
+        for Raster, Name in MassCZM_folder:
 
             # Step 1: Cell Statistics. This process will calculate a cell-by-cell mean statistic from multiple rasters...the Mass_CZM Coastal Flood Excedence RGB raster data
             CellStatistic_Ouput = arcpy.sa.CellStatistics(in_rasters_or_constants = [Raster], statistics_type = "MEAN",
@@ -183,7 +183,7 @@ env.scratchWorkspace ="C:/BOHA_SpatialDecisionSupportSystem/Data/Raster_Scratch.
     Reclassify_c_1CFEP = c_1CFEP
 
     #Setting the environment
-    for Raster, Name in MassCZM_folder
+    for Raster, Name in MassCZM_folder:
 
         # Step 1: Cell Statistics. This process will calculate a cell-by-cell mean statistic from multiple rasters...the Mass_CZM Coastal Flood Excedence RGB raster data
         CellStatistic_Ouput = arcpy.sa.CellStatistics(in_rasters_or_constants = [Raster], statistics_type = "MEAN",

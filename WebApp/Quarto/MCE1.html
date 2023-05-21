@@ -115,7 +115,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p><em>Input Group 3</em>: Infrastructure/Facilties (piers, park facilities, cottages, shops, etc.)</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Local variables</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>Focal_Resources_Polys_Merge <span class="op">=</span> <span class="st">"Vector_Data.gdb/Focal_Resources_Polys_Merge"</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Output_Raster_Dataset <span class="op">=</span> (<span class="st">"C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_Project/BOHA_SpatialDecisionSupportSystem/Data/Raster_Scratch.gdb/FR_Merge_PolygonToRaster"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Output_Raster_Dataset <span class="op">=</span> (<span class="st">"C:/BOHA_SpatialDecisionSupportSystem/Data/Raster_Scratch.gdb/FR_Merge_PolygonToRaster"</span>)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>FR_Grid <span class="op">=</span> (<span class="st">"C:/Users/amyca/OneDrive/Documents/GTECH732_AdvGIS/Final_Project/BOHA_SpatialDecisionSupportSystem/Data/Raster_Output.gdb/FR_Grid"</span>)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1. Polygon to Raster (Polygon to Raster) (conversion)    </span></span>
@@ -150,7 +150,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    BOHA_BluffsRetreating_EucDistance.save(in_raster_BR)</span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>in_raster_BR <span class="op">=</span> arcpy.Raster(in_raster_BR)</span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">#Step 2: Re-scale the distance from the sandy shorelines so the cells closest to sandy shorelines are 1 and the cells furthest from the sandy shorelines are 0.</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">#Step 2: Re-scale the distance from the sandy shorelines so the cells closest to bluff retreat zones are 1 and the cells furthest from the bluff retreat zones are 0.</span></span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>BluffRetreat_Grid <span class="op">=</span> (<span class="dv">1</span><span class="op">-</span>(in_raster_BR <span class="op">-</span> in_raster_BR.minimum)<span class="op">/</span>(in_raster_BR.maximum<span class="op">-</span>in_raster_BR.minimum))</span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>BluffRetreat_Grid.save(BluffRetreat_Grid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><em>Input 2: Distance from sandy shorelines (0-1)</em></p>

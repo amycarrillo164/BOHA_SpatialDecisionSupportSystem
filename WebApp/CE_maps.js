@@ -173,12 +173,15 @@ info.addTo(map);
 
 //Creating variables for data
 var nat_polygons = L.geoJson(nat_polys, {style: style_feature_frpolys, onEachFeature: onEachFeaturePoly,})
+//var nat_polygons = L.geoJson(nat_polys, {style: style_feature_frpolys})
 //.addTo(map);
 
 var infra_polygons = L.geoJson(infra_polys, {style: style_feature_frpolys, onEachFeature: onEachFeaturePoly,})
+//var infra_polygons = L.geoJson(infra_polys, {style: style_feature_frpolys})
 //.addTo(map);
 
 var cultural_polygons = L.geoJson(cultural_polys, {style: style_feature_frpolys, onEachFeature: onEachFeaturePoly,})
+//var cultural_polygons = L.geoJson(cultural_polys, {style: style_feature_frpolys})
 //.addTo(map);
 //var tabledata = L.geoJson(tableDat, {style: style_feature_frpolys, onEachFeature: onEachFeaturePoly,})
 
@@ -433,14 +436,14 @@ var table = new Tabulator("#example-table", {
 //FETCHING DATA
 
 // Fetch table data
-fetch("geojson_files/FR_Merge_Polys_MCE2.geojson")
-.then((response) => {
-  return response.json();
-})
-.then((data) => {
-  console.log(data);
-  tableDat.addData(data);
-  });
+// fetch("geojson_files/FR_Merge_Polys_MCE2.geojson")
+// .then((response) => {
+//   return response.json();
+// })
+// .then((data) => {
+//   console.log(data);
+//   tableDat.addData(data);
+//   });
 
 // Fetch BOHA Boundary
 fetch("geojson_files/BOHA_Boundary.geojson")
