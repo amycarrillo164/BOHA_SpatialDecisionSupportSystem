@@ -71,25 +71,6 @@ function style_feature_frpolys(feature) {
   };
 }
 
-// function to update the data table with the location annd text of each marker
-function updateDataTable (map) {
-	let dataTableBody = $('#data-table tbody')
-  dataTableBody.html('<tr></tr>')
-  map.eachLayer(layer => {
-    let popup = layer.getPopup()
-    if (popup) {
-      let text = $(popup.getContent()).find('.popup-span').text()
-      let latLng = layer.getLatLng()
-      dataTableBody.append(
-        $('<tr></tr>').append(
-          $('<td></td>').text(latLng.lat),
-          $('<td></td>').text(latLng.lng),
-          $('<td></td>').text(text),
-         )
-      )
-    }
-  })
-}
 
 
 // script for styling circle markers
@@ -266,6 +247,26 @@ changeCEMap = function({label, map}){
 ///////////////////////////////////////////////////////////////////////////////////////
 
 //data table
+
+// // function to update the data table with the location annd text of each marker
+// function updateDataTable (map) {
+// 	let dataTableBody = $('#data-table tbody')
+//   dataTableBody.html('<tr></tr>')
+//   map.eachLayer(layer => {
+//     let popup = layer.getPopup()
+//     if (popup) {
+//       let text = $(popup.getContent()).find('.popup-span').text()
+//       let latLng = layer.getLatLng()
+//       dataTableBody.append(
+//         $('<tr></tr>').append(
+//           $('<td></td>').text(latLng.lat),
+//           $('<td></td>').text(latLng.lng),
+//           $('<td></td>').text(text),
+//          )
+//       )
+//     }
+//   })
+// }
 
 // var table = new Tabulator("#example-table", {
 //   data: tabledata,
