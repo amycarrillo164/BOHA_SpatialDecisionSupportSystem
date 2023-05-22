@@ -1,15 +1,7 @@
 // Function for Island Boundary
 function onEachFeatureFn(feature, layer) {
   var popupContent =
-    //"<p> Island: " +
     feature.properties.Island;
-    //feature.geometry.type;
-    //  +
-    // "</br> Island: " +
-    // feature.properties.Island;
-    // "</br> Name: " +
-    // feature.properties.NAME +
-    // "</p>";
 
   if (feature.properties && feature.properties.popupContent) {
     popupContent += feature.properties.popupContent;
@@ -57,13 +49,13 @@ map.getPane('boundary_pane').style.pointerEvents = 'none';
 // display Carto basemap tiles with light features and labels
 var light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
   attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>'
-}); // EDIT - insert or remove ".addTo(map)" before last semicolon to display by default
+}); 
 
 
 /* Stamen colored terrain basemap tiles with labels */
 var terrain = L.tileLayer('https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png', {
   attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.'
-}); // EDIT - insert or remove ".addTo(map)" before last semicolon to display by default
+}); 
 
 var googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
     subdomains:['mt0','mt1','mt2','mt3'],
@@ -83,10 +75,8 @@ function style_feature_SLR1(feature) {
     fillColor: '#003E78', //'#5fbaff' 
     weight: 2,
     opacity: 1,
-    //color: 'white',
     dashArray: '3',
     fillOpacity: 1,
-    //color: "#000", fill: "#ccc", fillOpacity: 0.2 
   };
 }
 
@@ -96,23 +86,13 @@ function style_feature_SLR10(feature) {
     fillColor: "#005EB8",
     weight: 2,
     opacity: 0.9,
-    //color: 'white',
-    //dashArray: '3',
     fillOpacity: 1,
   };
 }
 
 function onEachFeatureFn(feature, layer) {
   var popupContent =
-    //"<p> Island: " +
     feature.properties.Island;
-    //feature.geometry.type;
-    //  +
-    // "</br> Island: " +
-    // feature.properties.Island;
-    // "</br> Name: " +
-    // feature.properties.NAME +
-    // "</p>";
 
   if (feature.properties && feature.properties.popupContent) {
     popupContent += feature.properties.popupContent;
@@ -132,8 +112,6 @@ function onEachFeatureFn(feature, layer) {
       e.target.openPopup();
     },
     mouseout: (e) => {
-      //SLR2030_1.resetStyle(e.target);
-      //SLR2030_10.resetStyle(e.target);
       Boundary.resetStyle(e.target);
       e.target.closePopup();
     },
@@ -163,7 +141,7 @@ var c2050_1CFEP = L.geoJSON(null, {style: style_feature_SLR1,});
 var c2050_10CFEP = L.geoJSON(null, {style: style_feature_SLR10,}); 
 var c2070_1CFEP = L.geoJSON(null, {style: style_feature_SLR1,}); 
 var c2070_10CFEP = L.geoJSON(null, {style: style_feature_SLR10,});
-//  slider
+
 
 //Layers
 var Boundary_9Islands = L.layerGroup([Boundary]);
@@ -173,19 +151,16 @@ var SLR2050_10_CFEP = L.layerGroup([c2050_10CFEP]);
 var SLR2050_1_CFEP = L.layerGroup([c2050_1CFEP]);
 var SLR2070_10_CFEP = L.layerGroup([c2070_10CFEP]);
 var SLR2070_1_CFEP = L.layerGroup([c2070_1CFEP]);
-// var marker_points = L.layerGroup([marker]);
 
 //Layer groups
 var overlayMaps = {
-   //"cultural points" : data,
-    "SLR 2030 + 10% AEP" : SLR2030_10_CFEP,
-    "SLR 2030 + 1% AEP" : SLR2030_1_CFEP,
-    "SLR 2050 + 10% AEP" : SLR2050_10_CFEP,
-    "SLR 2050 + 1% AEP" : SLR2050_1_CFEP,
-    "SLR 2070 + 10% AEP" : SLR2070_10_CFEP,
-    "SLR 2070 + 1% AEP" : SLR2070_1_CFEP,
+    "SLR 2030 + 10% CFEP" : SLR2030_10_CFEP,
+    "SLR 2030 + 1% CFEP" : SLR2030_1_CFEP,
+    "SLR 2050 + 10% CFEP" : SLR2050_10_CFEP,
+    "SLR 2050 + 1% CFEP" : SLR2050_1_CFEP,
+    "SLR 2070 + 10% CFEP" : SLR2070_10_CFEP,
+    "SLR 2070 + 1% CFEP" : SLR2070_1_CFEP,
     "9 Islands Boundary" : Boundary_9Islands,
-    // "Cultural & Infrastructure/Facilities" : marker_points,
 };
 
 
@@ -256,15 +231,6 @@ changeFloodMap = function({label, map}){
 
 // FETCHING THE DATA
 
-// Fetch markers
-// fetch("./geojson_files/centroid_focalresources.geojson")
-// .then((response) => {
-//   return response.json();
-// })
-// .then((data) => {
-//   console.log(data);
-//   markers.addData(data);
-//   });
 
 // Fetch boundary
 fetch("./geojson_files/BOHA_Boundary.geojson")
