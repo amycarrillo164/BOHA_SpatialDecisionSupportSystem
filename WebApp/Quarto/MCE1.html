@@ -79,8 +79,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="focal-resources-coastal-exposure-analysis" class="level1">
-<h1>Focal Resources Coastal Exposure Analysis</h1>
 <section id="methodology" class="level2">
 <h2 class="anchored" data-anchor-id="methodology">Methodology</h2>
 <section id="overview-of-steps" class="level3">
@@ -150,7 +148,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    BOHA_BluffsRetreating_EucDistance.save(in_raster_BR)</span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>in_raster_BR <span class="op">=</span> arcpy.Raster(in_raster_BR)</span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">#Step 2: Re-scale the distance from the sandy shorelines so the cells closest to bluff retreat zones are 1 and the cells furthest from the bluff retreat zones are 0.</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">#Step 2: Re-scale the distance from the fluff retreat zones so the cells closest to bluff retreat zones are 1 and the cells furthest from the bluff retreat zones are 0.</span></span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>BluffRetreat_Grid <span class="op">=</span> (<span class="dv">1</span><span class="op">-</span>(in_raster_BR <span class="op">-</span> in_raster_BR.minimum)<span class="op">/</span>(in_raster_BR.maximum<span class="op">-</span>in_raster_BR.minimum))</span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>BluffRetreat_Grid.save(BluffRetreat_Grid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><em>Input 2: Distance from sandy shorelines (0-1)</em></p>
@@ -214,7 +212,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>Reclassify_c_10CFEP <span class="op">=</span> c_10CFEP</span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Setting the environment (MassCZM_folder = SLR Scenarios 2030, 2050, 2070 and related CFEP Rasters)</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> Raster, Name <span class="kw">in</span> MassCZM_folder</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> Raster, Name <span class="kw">in</span> MassCZM_folder:</span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 1: Cell Statistics. This process will calculate a cell-by-cell mean statistic from multiple rasters...the Mass_CZM Coastal Flood Excedence RGB raster data</span></span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    CellStatistic_Ouput <span class="op">=</span> arcpy.sa.CellStatistics(in_rasters_or_constants <span class="op">=</span> [Raster], statistics_type <span class="op">=</span> <span class="st">"MEAN"</span>,</span>
@@ -237,7 +235,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>Reclassify_c_1CFEP <span class="op">=</span> c_1CFEP</span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Setting the environment</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> Raster, Name <span class="kw">in</span> MassCZM_folder</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> Raster, Name <span class="kw">in</span> MassCZM_folder:</span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 1: Cell Statistics. This process will calculate a cell-by-cell mean statistic from multiple rasters...the Mass_CZM Coastal Flood Excedence RGB raster data</span></span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    CellStatistic_Ouput <span class="op">=</span> arcpy.sa.CellStatistics(in_rasters_or_constants <span class="op">=</span> [Raster], statistics_type <span class="op">=</span> <span class="st">"MEAN"</span>,</span>
@@ -440,7 +438,6 @@ The Results...
 <figcaption class="figure-caption">SLR 2070</figcaption>
 </figure>
 </div>
-</section>
 </section>
 
 </main>
