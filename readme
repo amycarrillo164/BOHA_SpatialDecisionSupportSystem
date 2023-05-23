@@ -1,0 +1,40 @@
+## Data Structure
+> Web App
+    Data for leaflet map:
+    > geojson_files
+    > js_datafiles
+
+    Leaflet plugin js files:
+    > js
+    
+    CSS/HTML/JS to create website:
+    > background.html
+    ---
+    > coastal_exposure.html
+    > CE_maps.js
+    ---
+    > index.html
+    > slr.js
+    ---
+    MCE1_methods.html
+    (references data & uses html from "Quarto" folder)
+    ---
+    pythonapp.html
+
+> Dash App
+    CSS for app:
+    > assets
+    Application Python Code:
+    > app.py
+    Data:
+    > FR_Centroids_MCE2_latlong.csv 
+
+
+Instructions for interactive python application set-up:
+1. Download WebApp
+2. Download the dash app folder
+3. Run the python Dash App
+4. Go to WebApp > MCE1_methods.html
+5. Replace the following line with personal iframe src
+<iframe src="http://127.0.0.1:8050/" width=100% height=700></iframe>
+6. Refresh website
