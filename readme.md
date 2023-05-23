@@ -29,7 +29,7 @@ CSS/HTML/JS to create website:
 > data.html
 ```
 
-# Dash App
+# Web App + Dash App
 
 ## Instructions for host site & interactive python application set-up:
 
@@ -49,7 +49,7 @@ CSS/HTML/JS to create website:
 
 6.  Refresh website
 
-## Data Folder/Files Structure & Notes
+### Data Folder/Files Structure & Notes
 
 ```         
 Application Python Code:
