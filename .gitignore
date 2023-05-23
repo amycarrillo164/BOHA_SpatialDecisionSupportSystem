@@ -7,3 +7,6 @@ node_modules
 Data
 .Data
 .vscode
+.gitignore
+package-lock.json
+package.json
