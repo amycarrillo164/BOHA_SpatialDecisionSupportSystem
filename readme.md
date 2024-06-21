@@ -8,7 +8,7 @@ The web application is the host site for everything found inside the github repo
 
 To use the data created or used for the project please email me at @amy.carrillo22\@myhunter.cuny.edu
 
-## Data Folder/Files Structure & Notes
+# Website Data Folder/Files Structure & Notes
 
 ```         
 Data for leaflet map: 
